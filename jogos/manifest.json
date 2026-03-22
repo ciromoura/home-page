@@ -1,0 +1,19 @@
+{
+  "categories": [
+    {
+      "name": "Jogos",
+      "items": [
+        {
+          "title": "Passageiros",
+          "href": "passageiros.html",
+          "description": ""
+        },
+        {
+          "title": "Somando",
+          "href": "somando.html",
+          "description": ""
+        }
+      ]
+    }
+  ]
+}

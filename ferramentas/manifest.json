@@ -1,0 +1,14 @@
+{
+  "categories": [
+    {
+      "name": "Lógica",
+      "items": [
+        {
+          "title": "Gerador de Tabela Verdade",
+          "href": "Gerador de Tabela Verdade/index.html",
+          "description": "Tabelas verdade para fórmulas da lógica proposicional"
+        }
+      ]
+    }
+  ]
+}

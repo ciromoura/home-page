@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})()</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador de Tabela Verdade — @ciromoura</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ['selector', '[data-theme="dark"]'],
+            corePlugins: { preflight: false }
+        }
+    </script>
+    <style>
+        /* Tabela gerada pelo algoritmo */
+        .truth {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        .truth th {
+            padding: 12px 18px;
+            font-weight: 700;
+            color: var(--accent-color);
+            background: var(--glass-bg);
+            border-bottom: 2px solid var(--glass-border);
+        }
+        .truth td {
+            padding: 10px 18px;
+            border-bottom: 1px solid var(--glass-border);
+            transition: background 0.15s ease;
+        }
+        .truth tr:not(:first-child):hover td {
+            background: var(--glass-bg-hover);
+        }
+        /* Override inline border-right:black para combinar com o tema */
+        .truth th[style*="border-right"],
+        .truth td[style*="border-right"] {
+            border-right: 1px solid var(--glass-border) !important;
+        }
+        /* Override inline color:red para usar a cor de destaque do tema */
+        .truth td[style*="color: red"],
+        .truth td[style*="color:red"] {
+            color: var(--secondary-color) !important;
+            font-weight: 700;
+        }
+
+        /* Input glass */
+        .input-glass {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            color: var(--text-color);
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .input-glass:focus {
+            outline: none;
+            background: var(--glass-bg-hover);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 20%, transparent);
+        }
+        .input-glass::placeholder {
+            opacity: 0.45;
+        }
+
+        /* Botão primário */
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+            box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-color) 40%, transparent);
+        }
+
+        /* Botão secundário */
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-color);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--glass-blur);
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            background: var(--glass-bg-hover);
+        }
+
+        /* Chip de operador */
+        .op-chip {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .op-chip:hover {
+            background: var(--glass-bg-hover);
+            transform: translateY(-2px);
+        }
+        .op-chip .op-sym {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="shadow"></div>
+
+    <header class="navbar">
+        <div class="container">
+            <div class="logo"><a href="../../index.html">@ciromoura</a></div>
+            <nav class="menu">
+                <button class="close-btn">&times;</button>
+                <ul>
+                    <li><a href="../../index.html">Início</a></li>
+                    <li><a href="../index.html">Ferramentas</a></li>
+                    <li><button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i></button></li>
+                </ul>
+            </nav>
+            <button class="hamburger"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="section inicio-section">
+            <div class="container">
+                <div class="inicio-content">
+                    <div class="inicio-text card">
+                        <h1 class="name-full">Tabela Verdade</h1>
+                        <p>Lógica proposicional</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conteúdo -->
+        <section class="section skills-section">
+            <div class="container flex flex-col gap-5">
+
+                <!-- Referência de operadores -->
+                <div class="card">
+                    <p class="text-sm font-semibold mb-3 opacity-60 uppercase tracking-wide">Operadores — clique para inserir</p>
+                    <div class="flex flex-wrap gap-2" id="op-buttons">
+                        <button class="op-chip px-3 py-1.5 rounded-xl text-sm font-mono" onclick="insertOp('~')" title="Negação">
+                            <span class="op-sym">~</span> <span class="opacity-60 text-xs">NÃO</span>
+                        </button>
+                        <button class="op-chip px-3 py-1.5 rounded-xl text-sm font-mono" onclick="insertOp('&')" title="Conjunção">
+                            <span class="op-sym">&amp;</span> <span class="opacity-60 text-xs">E</span>
+                        </button>
+                        <button class="op-chip px-3 py-1.5 rounded-xl text-sm font-mono" onclick="insertOp('v')" title="Disjunção">
+                            <span class="op-sym">v</span> <span class="opacity-60 text-xs">OU</span>
+                        </button>
+                        <button class="op-chip px-3 py-1.5 rounded-xl text-sm font-mono" onclick="insertOp('x')" title="Ou exclusivo">
+                            <span class="op-sym">x</span> <span class="opacity-60 text-xs">XOR</span>
+                        </button>
+                        <button class="op-chip px-3 py-1.5 rounded-xl text-sm font-mono" onclick="insertOp('>')" title="Condicional">
+                            <span class="op-sym">&gt;</span> <span class="opacity-60 text-xs">SE…ENTÃO</span>
+                        </button>
+                        <button class="op-chip px-3 py-1.5 rounded-xl text-sm font-mono" onclick="insertOp('=')" title="Bicondicional">
+                            <span class="op-sym">=</span> <span class="opacity-60 text-xs">SSE</span>
+                        </button>
+                        <button class="op-chip px-3 py-1.5 rounded-xl text-sm font-mono" onclick="insertOp('(')" title="Parêntese esquerdo">
+                            <span class="op-sym">(</span>
+                        </button>
+                        <button class="op-chip px-3 py-1.5 rounded-xl text-sm font-mono" onclick="insertOp(')')" title="Parêntese direito">
+                            <span class="op-sym">)</span>
+                        </button>
+                    </div>
+                    <p class="text-xs mt-3 opacity-50">Variáveis: letras maiúsculas A–Z. Operadores binários exigem parênteses: <code class="font-mono">(A&amp;B)</code>, <code class="font-mono">(AvB)</code></p>
+                </div>
+
+                <!-- Formulário -->
+                <div class="card">
+                    <h2 class="text-lg font-bold mb-4">Fórmula</h2>
+
+                    <!-- Input -->
+                    <input
+                        id="in"
+                        type="text"
+                        placeholder="Ex: ((AvB)>~C)"
+                        class="input-glass w-full px-4 py-3 rounded-2xl text-base font-mono mb-4"
+                        onkeydown="if(event.key==='Enter') construct()"
+                        autocomplete="off"
+                        spellcheck="false"
+                    />
+
+                    <!-- Estilo da tabela -->
+                    <div class="flex gap-6 mb-5 flex-wrap">
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input type="radio" name="style" id="style-completo" checked
+                                class="w-4 h-4 cursor-pointer"
+                                style="accent-color: var(--accent-color)">
+                            <span class="text-sm font-medium">Completo <span class="opacity-50 text-xs">(todas as subf&oacute;rmulas)</span></span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input type="radio" name="style" id="style-condensado"
+                                class="w-4 h-4 cursor-pointer"
+                                style="accent-color: var(--accent-color)">
+                            <span class="text-sm font-medium">Condensado <span class="opacity-50 text-xs">(s&oacute; resultado)</span></span>
+                        </label>
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="flex gap-3 flex-wrap">
+                        <button onclick="construct()"
+                            class="btn-primary px-6 py-2.5 rounded-2xl font-semibold text-sm">
+                            <i class="fas fa-table mr-2"></i>Gerar Tabela
+                        </button>
+                        <button onclick="clear()"
+                            class="btn-secondary px-6 py-2.5 rounded-2xl font-semibold text-sm">
+                            <i class="fas fa-eraser mr-2"></i>Limpar
+                        </button>
+                    </div>
+
+                    <!-- Exemplos -->
+                    <div class="mt-4 flex flex-wrap gap-2 items-center">
+                        <span class="text-xs opacity-50 mr-1">Exemplos:</span>
+                        <button class="op-chip px-3 py-1 rounded-xl text-xs font-mono" onclick="setExample('(A&B)')">
+                            (A&amp;B)
+                        </button>
+                        <button class="op-chip px-3 py-1 rounded-xl text-xs font-mono" onclick="setExample('(A>B)')">
+                            (A&gt;B)
+                        </button>
+                        <button class="op-chip px-3 py-1 rounded-xl text-xs font-mono" onclick="setExample('~A')">
+                            ~A
+                        </button>
+                        <button class="op-chip px-3 py-1 rounded-xl text-xs font-mono" onclick="setExample('((AvB)>~C)')">
+                            ((AvB)&gt;~C)
+                        </button>
+                        <button class="op-chip px-3 py-1 rounded-xl text-xs font-mono" onclick="setExample('((A>B)=(~Bv~A))')">
+                            Contrap.
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Saída da tabela verdade -->
+                <div id="table-wrapper" class="card overflow-x-auto hidden">
+                    <div id="truthtable"></div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 @ciromoura. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="geradortv.js"></script>
+    <script>
+        // ── Tema ─────────────────────────────────────────────
+        const themeToggle = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+        if (root.getAttribute('data-theme') === 'dark') {
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        themeToggle.addEventListener('click', () => {
+            const isDark = root.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                root.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                root.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // ── Menu mobile ───────────────────────────────────────
+        const hamburger = document.querySelector('.hamburger');
+        const menu = document.querySelector('.menu');
+        const shadow = document.querySelector('.shadow');
+        const closeBtn = document.querySelector('.close-btn');
+        if (hamburger && menu && shadow && closeBtn) {
+            hamburger.addEventListener('click', () => {
+                menu.classList.toggle('active');
+                shadow.style.display = menu.classList.contains('active') ? 'flex' : 'none';
+            });
+            closeBtn.addEventListener('click', () => {
+                menu.classList.remove('active');
+                shadow.style.display = 'none';
+            });
+            shadow.addEventListener('click', e => {
+                if (e.target === shadow) {
+                    menu.classList.remove('active');
+                    shadow.style.display = 'none';
+                }
+            });
+        }
+
+        // ── Insere operador na posição do cursor ──────────────
+        function insertOp(op) {
+            const input = document.getElementById('in');
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const val = input.value;
+            input.value = val.slice(0, start) + op + val.slice(end);
+            input.selectionStart = input.selectionEnd = start + op.length;
+            input.focus();
+        }
+
+        // ── Define exemplo e gera ─────────────────────────────
+        function setExample(formula) {
+            document.getElementById('in').value = formula;
+            construct();
+        }
+
+        // ── Mostra painel de resultado ────────────────────────
+        const _origConstruct = construct;
+        construct = function () {
+            _origConstruct();
+            const wrapper = document.getElementById('table-wrapper');
+            if (document.getElementById('truthtable').innerHTML.trim()) {
+                wrapper.classList.remove('hidden');
+                wrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        };
+
+        // ── Limpa também o painel de resultado ────────────────
+        const _origClear = clear;
+        clear = function () {
+            _origClear();
+            document.getElementById('table-wrapper').classList.add('hidden');
+            document.getElementById('truthtable').innerHTML = '';
+        };
+    </script>
+
+</body>
+
+</html>

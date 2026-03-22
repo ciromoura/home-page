@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Jam - Zona de Embarque</title>
+    <style>
+        :root {
+            --bg-color: #2c3e50;
+            --parking-bg: #34495e;
+            --dock-bg: #4b6584; /* Cor da zona intermediária */
+            --queue-bg: #ecf0f1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* --- HUD --- */
+        #hud {
+            height: 50px;
+            background-color: #1a252f;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 20;
+            font-size: 0.9rem;
+        }
+        .hud-val { color: #f1c40f; font-weight: bold; margin-left: 5px; }
+
+        /* --- 1. FILA (Topo) --- */
+        #queue-section {
+            height: 80px;
+            background-color: var(--queue-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 4px solid #bdc3c7;
+            overflow: hidden; 
+            position: relative;
+        }
+        
+        #queue-track {
+            display: flex;
+            gap: 8px;
+            transition: transform 0.3s ease-in-out;
+            padding-left: 60px; /* Espaço do Gate */
+        }
+
+        .passenger {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.1);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+            /* Animação de entrada */
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .gate-barrier {
+            position: absolute;
+            left: 50px; top: 0; bottom: 0; width: 4px;
+            background-color: #e74c3c; z-index: 5;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+        }
+
+        /* --- 2. ZONA DE EMBARQUE (Meio) --- */
+        #dock-section {
+            height: 220px; /* Altura fixa para comportar os ônibus verticais */
+            background-color: var(--dock-bg);
+            border-bottom: 4px solid #2c3e50;
+            display: flex;
+            align-items: flex-end; /* Alinha ônibus na parte de baixo */
+            justify-content: center; /* Centraliza */
+            padding: 10px 20px;
+            gap: 10px;
+            position: relative;
+        }
+
+        /* Texto de instrução ou label de zona */
+        #dock-label {
+            position: absolute;
+            top: 5px; left: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- 3. ESTACIONAMENTO (Baixo) --- */
+        #parking-section {
+            flex: 1;
+            background-color: var(--parking-bg);
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: flex-start;
+            gap: 12px;
+            overflow-y: auto;
+        }
+
+        /* --- VEÍCULOS --- */
+        .vehicle {
+            width: 50px; /* Largura fixa para todos */
+            background-color: #95a5a6;
+            border-radius: 6px 6px 2px 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column-reverse; /* Preenche de baixo pra cima */
+            align-items: center;
+            padding: 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        .vehicle:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        
+        /* Indicação de frente (agora no topo, pois é vertical) */
+        .vehicle::after {
+            content: '';
+            width: 80%; height: 4px;
+            background-color: rgba(0,0,0,0.2);
+            position: absolute; top: 4px;
+            border-radius: 2px;
+        }
+
+        /* Estados do Veículo */
+        .vehicle.in-dock {
+            cursor: default;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.4);
+        }
+        
+        /* Animação de Saída */
+        .vehicle.departing {
+            transform: translateX(100vw);
+            opacity: 0;
+            transition: transform 0.6s ease-in, opacity 0.6s;
+        }
+
+        /* Assentos */
+        .seat {
+            width: 16px; height: 16px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            margin: 2px 0; /* Margem vertical */
+        }
+        .seat.filled {
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(255,255,255,0.5);
+        }
+
+        /* Alturas baseadas na capacidade */
+        /* Fórmula visual: (capacidade * 22px) + padding */
+        .h-size-2 { height: 60px; }
+        .h-size-4 { height: 110px; }
+        .h-size-8 { height: 190px; } /* Ajustado para não estourar a tela */
+        .h-size-16 { height: 190px; width: 90px; flex-wrap: wrap; flex-direction: column-reverse; align-content: center; } /* Exceção: mais largo */
+
+        /* --- MODAIS --- */
+        .modal {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 100; color: white;
+        }
+        .modal h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .modal button {
+            padding: 12px 30px; font-size: 1.2rem;
+            background-color: #2ecc71; color: white;
+            border: none; border-radius: 25px; cursor: pointer;
+            margin-top: 20px;
+        }
+
+        @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <div id="hud">
+        <div>Nível: <span id="lvl" class="hud-val">1</span></div>
+        <div>Fila: <span id="queue-count" class="hud-val">0</span></div>
+        <div>Vagas na Doca: <span id="dock-slots" class="hud-val">5</span></div>
+        <div>Tempo: <span id="time" class="hud-val">90s</span></div>
+    </div>
+
+    <div id="queue-section">
+        <div class="gate-barrier"></div>
+        <div id="queue-track"></div>
+    </div>
+
+    <div id="dock-section">
+        <div id="dock-label">Zona de Embarque (Max 5)</div>
+        </div>
+
+    <div id="parking-section">
+        </div>
+
+    <div id="modal-end" class="modal">
+        <h1 id="end-title">Fim</h1>
+        <p id="end-msg">...</p>
+        <button onclick="nextLevel()" id="btn-next">Próximo</button>
+        <button onclick="restartGame()" id="btn-restart" style="background-color:#e74c3c; display:none;">Reiniciar</button>
+    </div>
+
+    <script>
+        // --- DADOS ---
+        const COLORS = [
+            { code: '#e74c3c' }, // Red
+            { code: '#3498db' }, // Blue
+            { code: '#2ecc71' }, // Green
+            { code: '#f1c40f' }, // Yellow
+            { code: '#9b59b6' }, // Purple
+            { code: '#e67e22' }  // Orange
+        ];
+
+        // Definindo alturas visuais para as capacidades
+        const TYPES = [
+            { cap: 2, cls: 'h-size-2' },
+            { cap: 4, cls: 'h-size-4' },
+            { cap: 8, cls: 'h-size-8' }
+            // Removi o 16 por enquanto para manter a estética vertical limpa, 
+            // mas o código suporta se adicionar
+        ];
+
+        const MAX_DOCK_SLOTS = 5;
+
+        // --- ESTADO ---
+        let state = {
+            level: 1,
+            passengers: [], // Fila
+            parking: [],    // Veículos no estacionamento
+            dock: [],       // Veículos na zona intermediária
+            time: 90,
+            isPlaying: false,
+            timerId: null,
+            isProcessing: false // Bloqueio para animações
+        };
+
+        // --- ELEMENTOS ---
+        const els = {
+            queue: document.getElementById('queue-track'),
+            dock: document.getElementById('dock-section'),
+            parking: document.getElementById('parking-section'),
+            time: document.getElementById('time'),
+            queueCount: document.getElementById('queue-count'),
+            dockSlots: document.getElementById('dock-slots'),
+            lvl: document.getElementById('lvl'),
+            modal: document.getElementById('modal-end'),
+            title: document.getElementById('end-title'),
+            msg: document.getElementById('end-msg'),
+            btnNext: document.getElementById('btn-next'),
+            btnRestart: document.getElementById('btn-restart')
+        };
+
+        // --- INICIALIZAÇÃO ---
+        function initLevel() {
+            state.passengers = [];
+            state.parking = [];
+            state.dock = [];
+            state.isPlaying = true;
+            state.isProcessing = false;
+            
+            // Dificuldade
+            const pCount = 30 + (state.level * 15); // Aumenta passageiros
+            state.time = 60 + (state.level * 10);
+
+            // Gerar Passageiros
+            generatePassengers(pCount);
+            
+            // Gerar Veículos
+            generateVehicles();
+
+            updateUI();
+            startTimer();
+            els.modal.style.display = 'none';
+        }
+
+        function generatePassengers(total) {
+            let count = 0;
+            state.colorMap = {}; 
+            COLORS.forEach(c => state.colorMap[c.code] = 0);
+
+            while(count < total) {
+                const color = COLORS[Math.floor(Math.random() * COLORS.length)].code;
+                const group = Math.floor(Math.random() * 6) + 1;
+                const add = Math.min(group, total - count);
+                
+                for(let i=0; i<add; i++) {
+                    state.passengers.push({ color: color, id: Math.random() });
+                    state.colorMap[color]++;
+                }
+                count += add;
+            }
+        }
+
+        function generateVehicles() {
+            // Garante veículos suficientes para cada cor
+            for (let colorCode in state.colorMap) {
+                let needed = state.colorMap[colorCode];
+                let currentCap = 0;
+                
+                while(currentCap < needed) {
+                    const type = TYPES[Math.floor(Math.random() * TYPES.length)];
+                    createVehicle(colorCode, type);
+                    currentCap += type.cap;
+                }
+                // Adiciona um extra por segurança
+                createVehicle(colorCode, TYPES[0]);
+            }
+
+            // Adiciona veículos aleatórios extras para poluir o estacionamento
+            for(let i=0; i < 5 + state.level; i++) {
+                const c = COLORS[Math.floor(Math.random() * COLORS.length)].code;
+                const t = TYPES[Math.floor(Math.random() * TYPES.length)];
+                createVehicle(c, t);
+            }
+
+            // Embaralhar
+            state.parking.sort(() => Math.random() - 0.5);
+        }
+
+        function createVehicle(color, type) {
+            state.parking.push({
+                id: Math.random().toString(36),
+                color: color,
+                cap: type.cap,
+                count: 0, // Passageiros atuais
+                cls: type.cls,
+                inDock: false
+            });
+        }
+
+        // --- RENDERIZAÇÃO ---
+        function updateUI() {
+            renderQueue();
+            renderDock();
+            renderParking();
+            
+            els.time.innerText = state.time + 's';
+            els.lvl.innerText = state.level;
+            els.queueCount.innerText = state.passengers.length;
+            els.dockSlots.innerText = (MAX_DOCK_SLOTS - state.dock.length);
+
+            // Cores de alerta
+            els.dockSlots.style.color = state.dock.length === MAX_DOCK_SLOTS ? '#e74c3c' : '#f1c40f';
+        }
+
+        function renderQueue() {
+            els.queue.innerHTML = '';
+            // Renderiza apenas os primeiros 15 para performance
+            const limit = Math.min(state.passengers.length, 15);
+            for(let i=0; i<limit; i++) {
+                const p = state.passengers[i];
+                const div = document.createElement('div');
+                div.className = 'passenger';
+                div.style.backgroundColor = p.color;
+                els.queue.appendChild(div);
+            }
+        }
+
+        function renderParking() {
+            els.parking.innerHTML = '';
+            state.parking.forEach((v, idx) => {
+                const el = createVehicleElement(v);
+                el.onclick = () => moveFromParkingToDock(idx);
+                els.parking.appendChild(el);
+            });
+        }
+
+        function renderDock() {
+            els.dock.innerHTML = '<div id="dock-label">Zona de Embarque (Max 5)</div>';
+            state.dock.forEach(v => {
+                const el = createVehicleElement(v);
+                el.classList.add('in-dock');
+                els.dock.appendChild(el);
+            });
+        }
+
+        function createVehicleElement(v) {
+            const el = document.createElement('div');
+            el.className = `vehicle ${v.cls}`;
+            el.style.backgroundColor = v.color;
+            
+            // Renderiza assentos (preenchidos e vazios)
+            for(let i=0; i<v.cap; i++) {
+                const seat = document.createElement('div');
+                seat.className = 'seat';
+                if(i < v.count) {
+                    seat.classList.add('filled');
+                    seat.style.backgroundColor = '#fff';
+                }
+                el.appendChild(seat);
+            }
+            return el;
+        }
+
+        // --- LÓGICA DE JOGO ---
+
+        function moveFromParkingToDock(parkingIdx) {
+            if(!state.isPlaying || state.isProcessing) return;
+            
+            // Regra: Doca cheia
+            if(state.dock.length >= MAX_DOCK_SLOTS) {
+                // Feedback visual de erro (opcional)
+                return;
+            }
+
+            const vehicle = state.parking.splice(parkingIdx, 1)[0];
+            vehicle.inDock = true;
+            state.dock.push(vehicle);
+
+            updateUI();
+            
+            // Ao entrar na doca, tenta embarcar passageiros imediatamente
+            attemptBoarding();
+        }
+
+        function attemptBoarding() {
+            if(state.passengers.length === 0) {
+                checkWinCondition();
+                return;
+            }
+
+            state.isProcessing = true;
+            let boardingHappened = false;
+            let fullVehicleFound = -1;
+
+            // Pega o primeiro passageiro
+            const passenger = state.passengers[0];
+
+            // Procura um veículo na doca que combine com a cor E tenha espaço
+            // A prioridade geralmente é o veículo que chegou antes ou qualquer um?
+            // Neste design, qualquer veículo na doca serve.
+            const targetVehicle = state.dock.find(v => v.color === passenger.color && v.count < v.cap);
+
+            if (targetVehicle) {
+                // Embarque acontece
+                state.passengers.shift(); // Remove passageiro
+                targetVehicle.count++;
+                boardingHappened = true;
+
+                // Checa se o veículo lotou com esse passageiro
+                if(targetVehicle.count >= targetVehicle.cap) {
+                    // Marca para partida
+                    // Não removemos agora para permitir a animação do ultimo passageiro entrando visualmente
+                }
+            }
+
+            updateUI();
+
+            if (boardingHappened) {
+                // Pequeno delay para efeito visual de "fila andando"
+                setTimeout(() => {
+                    // Verifica se algum carro lotou e precisa sair
+                    processDepartures(); 
+                }, 200); 
+            } else {
+                state.isProcessing = false;
+                // Se não houve embarque, verifica se o jogador está travado
+                checkGridlock();
+            }
+        }
+
+        function processDepartures() {
+            // Encontra veículos cheios na doca
+            const fullIndices = state.dock
+                .map((v, i) => v.count >= v.cap ? i : -1)
+                .filter(i => i !== -1)
+                .sort((a, b) => b - a); // Ordena decrescente para remover sem quebrar índices
+
+            if (fullIndices.length > 0) {
+                // Animação de saída para esses veículos
+                // (Simplificação: removemos lógica e atualizamos UI, em um jogo complexo usaríamos CSS transition na posição)
+                fullIndices.forEach(idx => {
+                    state.dock.splice(idx, 1);
+                });
+                
+                updateUI();
+                
+                // Após a saída, tentamos embarcar novamente (pois a fila andou ou novos passageiros são o foco)
+                setTimeout(() => attemptBoarding(), 300);
+            } else {
+                // Se ninguém saiu, tenta embarcar mais gente (loop recursivo até não dar mais match)
+                attemptBoarding();
+            }
+        }
+
+        function checkWinCondition() {
+            state.isProcessing = false;
+            if (state.passengers.length === 0) {
+                gameOver(true);
+            }
+        }
+
+        function checkGridlock() {
+            // Se a doca está cheia E nenhum carro na doca tem a cor do primeiro passageiro
+            // Então é Game Over (Travou)
+            if (state.dock.length === MAX_DOCK_SLOTS && state.passengers.length > 0) {
+                const pColor = state.passengers[0].color;
+                const hasMatch = state.dock.some(v => v.color === pColor && v.count < v.cap);
+                
+                if (!hasMatch) {
+                    // Travou!
+                    gameOver(false, "Engarrafamento! Doca cheia e sem cor compatível.");
+                }
+            }
+        }
+
+        // --- TIMER & FIM ---
+        function startTimer() {
+            if(state.timerId) clearInterval(state.timerId);
+            state.timerId = setInterval(() => {
+                if(!state.isPlaying) return;
+                state.time--;
+                els.time.innerText = state.time + 's';
+                
+                if(state.time <= 0) {
+                    gameOver(false, "Tempo esgotado!");
+                }
+            }, 1000);
+        }
+
+        function gameOver(win, msg) {
+            state.isPlaying = false;
+            clearInterval(state.timerId);
+            els.modal.style.display = 'flex';
+            
+            if(win) {
+                els.title.innerText = "Nível Completo!";
+                els.title.style.color = "#2ecc71";
+                els.msg.innerText = "Todos os passageiros embarcaram.";
+                els.btnNext.style.display = 'block';
+                els.btnRestart.style.display = 'none';
+            } else {
+                els.title.innerText = "Derrota";
+                els.title.style.color = "#e74c3c";
+                els.msg.innerText = msg || "Você falhou.";
+                els.btnNext.style.display = 'none';
+                els.btnRestart.style.display = 'block';
+            }
+        }
+
+        window.nextLevel = function() {
+            state.level++;
+            initLevel();
+        }
+
+        window.restartGame = function() {
+            state.level = 1;
+            initLevel();
+        }
+
+        // Iniciar
+        initLevel();
+
+    </script>
+</body>
+</html>

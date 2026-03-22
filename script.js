@@ -1,15 +1,22 @@
-// Alterna tema escuro/clara
+// Alterna tema escuro/claro
 const themeToggle = document.getElementById('theme-toggle');
-const body = document.body;
+const root = document.documentElement;
+
+// Atualiza o ícone conforme tema carregado
+if (root.getAttribute('data-theme') === 'dark') {
+  themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+}
 
 themeToggle.addEventListener('click', () => {
-  const currentTheme = body.getAttribute('data-theme');
+  const currentTheme = root.getAttribute('data-theme');
   if (currentTheme === 'dark') {
-    body.removeAttribute('data-theme');
+    root.removeAttribute('data-theme');
     themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+    localStorage.setItem('theme', 'light');
   } else {
-    body.setAttribute('data-theme', 'dark');
+    root.setAttribute('data-theme', 'dark');
     themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    localStorage.setItem('theme', 'dark');
   }
 });
 
@@ -39,44 +46,44 @@ if (hamburger && menu && shadow && closeBtn) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-const skills = [
-  { nome: "HTML", nivel: 90, class: 'Avançado' },
-  { nome: "CSS", nivel: 90, class: 'Avançado' },
-  { nome: "JavaScript", nivel: 80, class: 'Avançado'  },
-  { nome: "PHP", nivel: 75, class: 'Intermediário'  },
-  { nome: "Java", nivel: 70, class: 'Intermediário'  },
-  { nome: "Python", nivel: 75, class: 'Intermediário'  },
-  { nome: "React Native", nivel: 85, class: 'Avançado'  },
-  { nome: "Vue", nivel: 35, class: 'Iniciante'  },
-  { nome: "Next", nivel: 70, class: 'Intermediário'  }
-];
+  const skills = [
+    { nome: "HTML", nivel: 90, class: 'Avançado' },
+    { nome: "CSS", nivel: 90, class: 'Avançado' },
+    { nome: "JavaScript", nivel: 80, class: 'Avançado' },
+    { nome: "PHP", nivel: 75, class: 'Intermediário' },
+    { nome: "Java", nivel: 70, class: 'Intermediário' },
+    { nome: "Python", nivel: 75, class: 'Intermediário' },
+    { nome: "React Native", nivel: 85, class: 'Avançado' },
+    { nome: "Vue", nivel: 35, class: 'Iniciante' },
+    { nome: "Next", nivel: 70, class: 'Intermediário' }
+  ];
 
-const skillsContainer = document.getElementById("skillsContainer");
+  const skillsContainer = document.getElementById("skillsContainer");
 
-skills.forEach(skill => {
-  const skillDiv = document.createElement("div");
-  skillDiv.classList.add("skill");
+  skills.forEach(skill => {
+    const skillDiv = document.createElement("div");
+    skillDiv.classList.add("skill");
 
-  const label = document.createElement("label");
-  label.textContent = skill.nome;
+    const label = document.createElement("label");
+    label.textContent = skill.nome;
 
-  const skillClass = document.createElement("spam");
-  skillClass.textContent = skill.class;
+    const skillClass = document.createElement("spam");
+    skillClass.textContent = skill.class;
 
-  const progressBar = document.createElement("div");
-  progressBar.classList.add("progress-bar");
+    const progressBar = document.createElement("div");
+    progressBar.classList.add("progress-bar");
 
-  const progress = document.createElement("div");
-  progress.classList.add("progress");
-  progress.style.width = "0%"; 
-  progress.setAttribute("data-nivel", skill.nivel);
+    const progress = document.createElement("div");
+    progress.classList.add("progress");
+    progress.style.width = "0%";
+    progress.setAttribute("data-nivel", skill.nivel);
 
-  progressBar.appendChild(progress);
-  skillDiv.appendChild(label);
-  skillDiv.appendChild(progressBar);
-  skillDiv.appendChild(skillClass);
-  skillsContainer.appendChild(skillDiv);
-});
+    progressBar.appendChild(progress);
+    skillDiv.appendChild(label);
+    skillDiv.appendChild(progressBar);
+    skillDiv.appendChild(skillClass);
+    skillsContainer.appendChild(skillDiv);
+  });
 
   setTimeout(() => {
     document.querySelectorAll(".progress").forEach(progress => {
@@ -84,5 +91,4 @@ skills.forEach(skill => {
       progress.style.width = finalWidth + "%";
     });
   }, 100);
-
 });
