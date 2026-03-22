@@ -5,13 +5,13 @@
       "items": [
         {
           "title": "Passageiros",
-          "href": "passageiros.html",
-          "description": ""
+          "href": "/jogos/passageiros",
+          "description": "Jogo educativo interativo."
         },
         {
           "title": "Somando",
-          "href": "somando.html",
-          "description": ""
+          "href": "/jogos/somando",
+          "description": "Jogo educativo interativo."
         }
       ]
     }

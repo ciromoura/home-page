@@ -5,8 +5,8 @@
       "items": [
         {
           "title": "Programação com Acesso a Banco de Dados",
-          "href": "PABD/pabd-fastapi.html",
-          "description": "Material sobre FASTAPI para a disciplina de Programação com Acesso a Banco de Dados (PABD)."
+          "href": "/aulas/pabd-fastapi",
+          "description": "Material sobre FastAPI para a disciplina de Programação com Acesso a Banco de Dados (PABD)."
         }
       ]
     }
