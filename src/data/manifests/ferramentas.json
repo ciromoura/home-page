@@ -9,6 +9,16 @@
           "description": "Tabelas verdade para fórmulas da lógica proposicional."
         }
       ]
+    },
+    {
+      "name": "Planejamento",
+      "items": [
+        {
+          "title": "Planning Poker",
+          "href": "/ferramentas/planning-poker",
+          "description": "Estime tarefas em equipe com votação colaborativa em tempo real via WebRTC."
+        }
+      ]
     }
   ]
 }
