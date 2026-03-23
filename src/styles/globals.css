@@ -1451,3 +1451,113 @@ pre .cls { color: #b45309; font-weight: 600; }
     flex-wrap: wrap;
     margin-top: 1.5rem;
 }
+
+/* ===========================
+   LessonSection — fullscreen
+   =========================== */
+.lesson-section {
+    position: relative;
+}
+
+.lesson-fs-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    color: var(--text-color);
+    opacity: 0.5;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: opacity 0.2s, color 0.2s, background 0.2s;
+}
+
+.lesson-section:hover .lesson-fs-btn {
+    opacity: 1;
+}
+
+.lesson-fs-btn:hover {
+    color: var(--accent-color);
+    background: var(--glass-bg-hover);
+}
+
+/* Fullscreen overlay */
+.lesson-fs-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: var(--bg-color);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.lesson-fs-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0.6rem 1.5rem;
+}
+
+.lesson-fs-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.25rem 0;
+    transition: color 0.2s;
+}
+
+.lesson-fs-close:hover {
+    color: var(--accent-color);
+}
+
+.lesson-fs-hint {
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.45rem;
+    background: var(--glass-border);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+}
+
+.lesson-fs-content {
+    flex: 1;
+    padding: 2.5rem 3rem;
+    width: 100%;
+    font-size: 1.4em;
+    line-height: 1.9;
+}
+
+.lesson-fs-content h1 { font-size: 2.6em; }
+.lesson-fs-content h2 { font-size: 2em; margin-bottom: 0.75em; }
+.lesson-fs-content h3 { font-size: 1.5em; }
+.lesson-fs-content p,
+.lesson-fs-content li   { font-size: 1em; }
+.lesson-fs-content pre  { font-size: 1em; }
+.lesson-fs-content code { font-size: 0.95em; }
+.lesson-fs-content i    { font-size: 1.1em; }
+.lesson-fs-content .card-icon  { font-size: 2.5em; }
+.lesson-fs-content .step-num   { font-size: 0.85em; }
+.lesson-fs-content .step-title { font-size: 1.1em; }
+.lesson-fs-content .copy-btn,
+.lesson-fs-content .code-lang  { font-size: 0.85em; }
+.lesson-fs-content .method-pill { font-size: 0.9em; padding: 0.3em 0.8em; }
+.lesson-fs-content .section-tag { font-size: 0.85em; }
+.lesson-fs-content .chapter-divider { font-size: 0.85em; }
+

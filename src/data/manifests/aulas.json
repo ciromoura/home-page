@@ -1,10 +1,10 @@
 {
   "categories": [
     {
-      "name": "PABD",
+      "name": "Programação com Acesso a Banco de Dados (PABD)",
       "items": [
         {
-          "title": "Programação com Acesso a Banco de Dados",
+          "title": "FastAPI - Primeiros passos",
           "href": "/aulas/pabd-fastapi",
           "description": "Material sobre FastAPI para a disciplina de Programação com Acesso a Banco de Dados (PABD)."
         }
