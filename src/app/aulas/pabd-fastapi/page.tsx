@@ -330,7 +330,7 @@ git push -u origin main`} />
                 </div>
 
                 <StepBlock num="01" title="Instalar FastAPI e Uvicorn" defaultOpen>
-                  <p>O <strong>uvicorn</strong> é o servidor ASGI que roda a aplicação FastAPI.</p>
+                  <p>O <strong>uvicorn</strong> é o servidor ASGI (Asynchronous Server Gateway Interface) que roda a aplicação FastAPI.</p>
                   <CodeBlock lang="BASH" html={`<span class="cmt"># Adicionar dependências com uv</span>
 uv add fastapi uvicorn
 

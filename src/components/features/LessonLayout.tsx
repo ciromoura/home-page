@@ -1,9 +1,23 @@
 'use client'
 
-import { useState, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode } from 'react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import BackgroundBlobs from '@/components/layout/BackgroundBlobs'
+
+interface FullscreenCtx {
+  fullscreen: boolean
+  setFullscreen: (v: boolean) => void
+}
+
+export const LessonFullscreenContext = createContext<FullscreenCtx>({
+  fullscreen: false,
+  setFullscreen: () => {},
+})
+
+export function useLessonFullscreen() {
+  return useContext(LessonFullscreenContext)
+}
 
 export interface LessonNavArgs {
   current: number
@@ -19,6 +33,7 @@ interface Props {
 export default function LessonLayout({ sections, children }: Props) {
   const [current, setCurrent] = useState(0)
   const [visited, setVisited] = useState<number[]>([])
+  const [fullscreen, setFullscreen] = useState(false)
 
   function goTo(n: number) {
     setCurrent(n)
@@ -29,6 +44,7 @@ export default function LessonLayout({ sections, children }: Props) {
   const progressPct = (current / (sections.length - 1)) * 100
 
   return (
+    <LessonFullscreenContext.Provider value={{ fullscreen, setFullscreen }}>
     <>
       <BackgroundBlobs />
       <div className="shadow" />
@@ -60,5 +76,6 @@ export default function LessonLayout({ sections, children }: Props) {
 
       <Footer />
     </>
+    </LessonFullscreenContext.Provider>
   )
 }
