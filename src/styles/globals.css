@@ -8,7 +8,7 @@
 :root {
     --bg-color: #eef1fb;
     --text-color: #1e2a4a;
-    --accent-color: #5389e8;
+    --accent-color: #6788c2;
     --secondary-color: #6c63ff;
     --max-width: 960px;
     --padding-inline: 1rem;
@@ -132,6 +132,37 @@ body {
 }
 
 /* ===========================
+   LiquidGlass component
+   =========================== */
+
+/*
+ * Técnica: o wrapper tem `isolation: isolate` mas NÃO tem backdrop-filter.
+ * O `lg-backdrop` (z-index:-1 dentro do contexto isolado) aplica o blur e
+ * amostra diretamente o fundo da página — nunca o output de um pai com blur.
+ * Isso resolve o problema de backdrop-filter aninhados.
+ */
+.liquid-glass {
+    position: relative;
+    isolation: isolate;
+}
+
+.lg-backdrop {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+
+ 
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-shine);
+    pointer-events: none;
+    z-index: -1;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    background: rgba(255,255,255,0.1);
+    border-radius: 25px;
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+/* ===========================
    Layout
    =========================== */
 .container {
@@ -153,7 +184,7 @@ body {
     padding: 14px 16px;
 }
 
-.navbar .container {
+.navbar .navbar-pill {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -162,12 +193,11 @@ body {
     margin: 0 auto;
     border-radius: 32px;
     padding: 12px 24px;
-    background: var(--glass-bg);
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-shine);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Menu inside the pill: no glass of its own on desktop */
+.navbar-pill .menu .lg-backdrop {
+    display: none;
 }
 
 .logo a {
@@ -765,12 +795,28 @@ a:hover {
     .menu.active {
         display: flex;
         margin-top: 16px;
-        background: var(--glass-bg);
-        backdrop-filter: var(--glass-blur);
-        -webkit-backdrop-filter: var(--glass-blur);
-        border-radius: 32px;
-        border: 1px solid var(--glass-border);
-        box-shadow: var(--glass-shadow);
+        margin-left: 16px;
+        margin-right: 16px;
+        border-radius: 25px;
+    }
+
+    /* Light mode: dark text in mobile menu */
+    .menu.active a,
+    .menu.active .theme-btn,
+    .menu.active .close-btn {
+        color: #131313;
+    }
+
+    /* Dark mode: light text in mobile menu */
+    [data-theme="dark"] .menu.active a,
+    [data-theme="dark"] .menu.active .theme-btn,
+    [data-theme="dark"] .menu.active .close-btn {
+        color: #eeeeee;
+    }
+
+    /* Restore glass layer for mobile dropdown */
+    .navbar-pill .menu.active .lg-backdrop {
+        display: block;
     }
 
     .menu.active .close-btn {
@@ -792,11 +838,11 @@ a:hover {
     }
 
     .menu.active {
-        background: rgba(255, 255, 255, 0.65);
+        /* background: rgba(255, 255, 255, 0.65); */
     }
 
     [data-theme="dark"] .menu.active {
-        background: rgba(20, 20, 40, 0.82);
+        /* background: rgba(20, 20, 40, 0.82); */
     }
 
     .menu ul {

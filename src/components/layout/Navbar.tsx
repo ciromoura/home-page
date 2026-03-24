@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useTheme } from '@/contexts/ThemeContext'
+import LiquidGlass from '@/components/ui/LiquidGlass'
 
 const NAV_LINKS = [
   { label: 'Início',       href: '/' },
@@ -24,11 +25,13 @@ export default function Navbar() {
         <div className="shadow" style={{ display: 'flex' }} onClick={closeMenu} />
       )}
       <header className="navbar">
-        <div className="container">
+        <LiquidGlass className="navbar-pill">
           <div className="logo">
             <Link href="/">@ciromoura</Link>
           </div>
-          <nav className={`menu${menuOpen ? ' active' : ''}`}>
+
+          {/* Desktop: inline nav links — Mobile: absolute dropdown */}
+          <LiquidGlass as="nav" className={`menu${menuOpen ? ' active' : ''}`}>
             <button className="close-btn" onClick={closeMenu}>&times;</button>
             <ul>
               {NAV_LINKS.map(({ label, href }) => (
@@ -42,11 +45,12 @@ export default function Navbar() {
                 </button>
               </li>
             </ul>
-          </nav>
+          </LiquidGlass>
+
           <button className="hamburger" onClick={() => setMenuOpen(o => !o)}>
             <i className="fas fa-bars" />
           </button>
-        </div>
+        </LiquidGlass>
       </header>
     </>
   )
