@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function LessonSection({ children }: Props) {
-  const { fullscreen, setFullscreen } = useLessonFullscreen()
+  const { fullscreen, setFullscreen, exportMode, setExportMode } = useLessonFullscreen()
   const [mounted,    setMounted]    = useState(false)
   const [mode,       setMode]       = useState<Mode>('none')
   const [pointerPos, setPointerPos] = useState({ x: 0, y: 0 })
@@ -42,6 +42,17 @@ export default function LessonSection({ children }: Props) {
       window.removeEventListener('keydown', onKey)
     }
   }, [fullscreen, setFullscreen])
+
+  useEffect(() => {
+    const reset = () => setExportMode(false)
+    window.addEventListener('afterprint', reset)
+    return () => window.removeEventListener('afterprint', reset)
+  }, [setExportMode])
+
+  function handleExportPDF() {
+    setExportMode(true)
+    setTimeout(() => window.print(), 150)
+  }
 
   /* ── Handlers: use clientX/Y (viewport coords) ── */
   function handleMouseMove(e: React.MouseEvent) {
@@ -155,13 +166,23 @@ export default function LessonSection({ children }: Props) {
 
   return (
     <div className="lesson-section">
-      <button
-        className="lesson-fs-btn"
-        onClick={() => setFullscreen(true)}
-        title="Expandir para tela cheia"
-      >
-        <i className="fas fa-expand" />
-      </button>
+      <div className="lesson-section-btns">
+        <button
+          className="lesson-fs-btn lesson-pdf-btn"
+          onClick={handleExportPDF}
+          title="Exportar como PDF"
+          disabled={exportMode}
+        >
+          <i className="fas fa-download" />
+        </button>
+        <button
+          className="lesson-fs-btn"
+          onClick={() => setFullscreen(true)}
+          title="Expandir para tela cheia"
+        >
+          <i className="fas fa-expand" />
+        </button>
+      </div>
       {children}
       {mounted && fullscreen && createPortal(modal, document.body)}
     </div>

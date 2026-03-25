@@ -1519,10 +1519,6 @@ pre .cls { color: #b45309; font-weight: 600; }
 }
 
 .lesson-fs-btn {
-    position: absolute;
-    top: 0.6rem;
-    right: 0.6rem;
-    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1532,19 +1528,19 @@ pre .cls { color: #b45309; font-weight: 600; }
     border: 1px solid var(--glass-border);
     border-radius: 50%;
     color: var(--text-color);
-    opacity: 0.5;
     cursor: pointer;
     font-size: 0.75rem;
-    transition: opacity 0.2s, color 0.2s, background 0.2s;
-}
-
-.lesson-section:hover .lesson-fs-btn {
-    opacity: 1;
+    transition: color 0.2s, background 0.2s;
 }
 
 .lesson-fs-btn:hover {
     color: var(--accent-color);
     background: var(--glass-bg-hover);
+}
+
+.lesson-fs-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
 }
 
 /* Fullscreen overlay */
@@ -2377,5 +2373,106 @@ pre .cls { color: #b45309; font-weight: 600; }
 
 .pp-csv-btn.model:hover {
     opacity: 1;
+}
+
+/* ── Lesson section button group (fullscreen + pdf) ────────── */
+.lesson-section-btns {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 10;
+    display: flex;
+    gap: 0.35rem;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+.lesson-section:hover .lesson-section-btns {
+    opacity: 1;
+}
+
+/* ── Quiz print list (questions only) ─────────────────────── */
+.quiz-print-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+}
+.quiz-print-q h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+}
+.quiz-print-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.quiz-print-line {
+    height: 1px;
+    background: var(--border-color, #ccc);
+    opacity: 0.5;
+    margin-left: 1rem;
+}
+
+/* ── Print styles ──────────────────────────────────────────── */
+@media print {
+    /* hide chrome */
+    .navbar,
+    .shadow,
+    [aria-hidden="true"],
+    .lesson-section-btns,
+    .pabd-nav-bar,
+    .section-nav,
+    .btn-export-pdf,
+    .pabd-hero-cta,
+    .toc-progress-row,
+    .toc-grid,
+    .step-chevron {
+        display: none !important;
+    }
+
+    /* clean backgrounds */
+    body,
+    main,
+    .container {
+        background: white !important;
+        color: #111 !important;
+    }
+
+    .card,
+    .step-block,
+    .info-box,
+    .code-wrap {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        backdrop-filter: none !important;
+    }
+
+    /* page breaks between sections */
+    .lesson-section + .lesson-section {
+        page-break-before: always;
+    }
+
+    /* padding for print */
+    main {
+        padding-top: 0 !important;
+    }
+
+    /* quiz print lines — ensure visible */
+    .quiz-print-line {
+        background: #999 !important;
+        opacity: 1 !important;
+        height: 1px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* method pills keep color in print */
+    .method-pill {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
 }
 

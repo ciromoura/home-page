@@ -6,13 +6,17 @@ import Footer from '@/components/layout/Footer'
 import BackgroundBlobs from '@/components/layout/BackgroundBlobs'
 
 interface FullscreenCtx {
-  fullscreen: boolean
+  fullscreen:    boolean
   setFullscreen: (v: boolean) => void
+  exportMode:    boolean
+  setExportMode: (v: boolean) => void
 }
 
 export const LessonFullscreenContext = createContext<FullscreenCtx>({
-  fullscreen: false,
+  fullscreen:    false,
   setFullscreen: () => {},
+  exportMode:    false,
+  setExportMode: () => {},
 })
 
 export function useLessonFullscreen() {
@@ -20,9 +24,10 @@ export function useLessonFullscreen() {
 }
 
 export interface LessonNavArgs {
-  current: number
-  goTo: (n: number) => void
-  visited: number[]
+  current:     number
+  goTo:        (n: number) => void
+  visited:     number[]
+  exportMode:  boolean
 }
 
 interface Props {
@@ -31,9 +36,10 @@ interface Props {
 }
 
 export default function LessonLayout({ sections, children }: Props) {
-  const [current, setCurrent] = useState(0)
-  const [visited, setVisited] = useState<number[]>([])
+  const [current,    setCurrent]    = useState(0)
+  const [visited,    setVisited]    = useState<number[]>([])
   const [fullscreen, setFullscreen] = useState(false)
+  const [exportMode, setExportMode] = useState(false)
 
   function goTo(n: number) {
     setCurrent(n)
@@ -44,7 +50,7 @@ export default function LessonLayout({ sections, children }: Props) {
   const progressPct = (current / (sections.length - 1)) * 100
 
   return (
-    <LessonFullscreenContext.Provider value={{ fullscreen, setFullscreen }}>
+    <LessonFullscreenContext.Provider value={{ fullscreen, setFullscreen, exportMode, setExportMode }}>
     <>
       <BackgroundBlobs />
       <div className="shadow" />
@@ -68,7 +74,7 @@ export default function LessonLayout({ sections, children }: Props) {
             </div>
           </div>
 
-          {children({ current, goTo, visited })}
+          {children({ current, goTo, visited, exportMode })}
 
           <div style={{ height: '3rem' }} />
         </div>

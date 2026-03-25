@@ -148,10 +148,10 @@ export default function PABDDbPage() {
 
   return (
     <LessonLayout sections={SECTION_LABELS}>
-      {({ current, goTo, visited }) => (
-        <>
-          {/* ── Section 0: Hero ── */}
-          {current === 0 && (
+      {({ current, goTo, visited, exportMode }) => (
+          <>
+            {/* ── Section 0: Hero ── */}
+            {(current === 0 || exportMode) && (
             <LessonSection>
               <div className="pabd-hero">
                 <div className="pabd-hero-badge">Informática - Programação com Acesso a Banco de Dados (PABD) - AULA 02</div>
@@ -169,7 +169,7 @@ export default function PABDDbPage() {
           )}
 
           {/* ── Section 1: Sumário ── */}
-          {current === 1 && (
+          {(current === 1 || exportMode) && (
             <LessonSection>
               <div className="card" style={{ marginTop: '1.5rem' }}>
                 <div className="section-tag">ÍNDICE</div>
@@ -216,7 +216,7 @@ export default function PABDDbPage() {
           )}
 
           {/* ── Section 2: Módulo 1 — SQLite & Estrutura ── */}
-          {current === 2 && (
+          {(current === 2 || exportMode) && (
             <LessonSection>
               <div style={{ marginTop: '1.5rem' }}>
                 <div className="card" style={{ marginBottom: '1rem' }}>
@@ -231,7 +231,7 @@ export default function PABDDbPage() {
                   </div>
                 </div>
 
-                <StepBlock num="01" title="Por que SQLite?" defaultOpen>
+                <StepBlock num="01" title="Por que SQLite?" defaultOpen forceOpen={exportMode}>
                   <p>Compare os dois modelos de armazenamento:</p>
                   <div className="card">
                     <table className="pabd-table">
@@ -247,7 +247,7 @@ export default function PABDDbPage() {
                   </div>
                 </StepBlock>
 
-                <StepBlock num="02" title="Nova estrutura de arquivos">
+                <StepBlock num="02" title="Nova estrutura de arquivos" forceOpen={exportMode}>
                   <p>Vamos organizar o projeto em três arquivos com responsabilidades distintas:</p>
                   <CodeBlock lang="ESTRUTURA" html={`minha-api/
 ├── main.py          <span class="cmt">← rotas FastAPI (mantemos e adaptamos)</span>
@@ -261,7 +261,7 @@ export default function PABDDbPage() {
                   </InfoBox>
                 </StepBlock>
 
-                <StepBlock num="03" title="Criar models.py">
+                <StepBlock num="03" title="Criar models.py" forceOpen={exportMode}>
                   <p>Movemos os modelos Pydantic para um arquivo dedicado:</p>
                   <CodeBlock lang="PYTHON — models.py" html={`<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel
 
@@ -274,7 +274,7 @@ export default function PABDDbPage() {
     id: <span class="cls">str</span>`} />
                 </StepBlock>
 
-                <StepBlock num="04" title="Criar database.py">
+                <StepBlock num="04" title="Criar database.py" forceOpen={exportMode}>
                   <p>Este arquivo concentra tudo relacionado ao SQLite: conexão, criação de tabelas e configurações.</p>
                   <CodeBlock lang="PYTHON — database.py" html={`<span class="kw">import</span> sqlite3
 
@@ -308,7 +308,7 @@ DB_PATH = <span class="str">"tarefas.db"</span>
                   </InfoBox>
                 </StepBlock>
 
-                <StepBlock num="05" title="Atualizar .gitignore">
+                <StepBlock num="05" title="Atualizar .gitignore" forceOpen={exportMode}>
                   <p>Adicione o arquivo de banco de dados ao <code>.gitignore</code> — não faz sentido versionar dados:</p>
                   <CodeBlock lang=".gitignore — adicionar linha" html={`.venv/
 __pycache__/
@@ -326,7 +326,7 @@ __pycache__/
           )}
 
           {/* ── Section 3: Módulo 2 — CRUD com SQLite ── */}
-          {current === 3 && (
+          {(current === 3 || exportMode) && (
             <LessonSection>
               <div style={{ marginTop: '1.5rem' }}>
                 <div className="card" style={{ marginBottom: '1rem' }}>
@@ -335,7 +335,7 @@ __pycache__/
                   <p className="lead">Agora reescrevemos o <code>main.py</code> substituindo as operações na lista Python por queries SQL. A estrutura dos endpoints é idêntica à Aula 1 — só muda onde os dados são armazenados.</p>
                 </div>
 
-                <StepBlock num="01" title="Configurar o lifespan (inicialização)" defaultOpen>
+                <StepBlock num="01" title="Configurar o lifespan (inicialização)" defaultOpen forceOpen={exportMode}>
                   <p>O <code>lifespan</code> é um context manager do FastAPI que executa código de setup antes da API começar a atender requisições — perfeito para criar o banco:</p>
                   <CodeBlock lang="PYTHON — início do main.py" html={`<span class="kw">from</span> contextlib <span class="kw">import</span> asynccontextmanager
 <span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI, HTTPException
@@ -355,7 +355,7 @@ __pycache__/
 app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</span>, version=<span class="str">"2.0.0"</span>, lifespan=lifespan)`} />
                 </StepBlock>
 
-                <StepBlock num="02" title="Endpoint: Criar tarefa (POST)">
+                <StepBlock num="02" title="Endpoint: Criar tarefa (POST)" forceOpen={exportMode}>
                   <div className="endpoint-row"><span className="method-pill post">POST</span> /tarefas</div>
                   <CodeBlock lang="PYTHON — main.py" html={`<span class="dec">@app.post</span>(<span class="str">"/tarefas"</span>, response_model=<span class="cls">Tarefa</span>, status_code=<span class="num">201</span>)
 <span class="kw">def</span> <span class="fn">criar_tarefa</span>(dados: <span class="cls">TarefaEntrada</span>):
@@ -374,7 +374,7 @@ app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</
                   </InfoBox>
                 </StepBlock>
 
-                <StepBlock num="03" title="Endpoint: Listar tarefas (GET)">
+                <StepBlock num="03" title="Endpoint: Listar tarefas (GET)" forceOpen={exportMode}>
                   <div className="endpoint-row"><span className="method-pill get">GET</span> /tarefas</div>
                   <CodeBlock lang="PYTHON — main.py" html={`<span class="dec">@app.get</span>(<span class="str">"/tarefas"</span>, response_model=List[<span class="cls">Tarefa</span>])
 <span class="kw">def</span> <span class="fn">listar_tarefas</span>():
@@ -397,7 +397,7 @@ app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</
                   </InfoBox>
                 </StepBlock>
 
-                <StepBlock num="04" title="Endpoint: Buscar por ID (GET)">
+                <StepBlock num="04" title="Endpoint: Buscar por ID (GET)" forceOpen={exportMode}>
                   <div className="endpoint-row"><span className="method-pill get">GET</span> /tarefas/{'{id}'}</div>
                   <CodeBlock lang="PYTHON — main.py" html={`<span class="dec">@app.get</span>(<span class="str">"/tarefas/{id}"</span>, response_model=<span class="cls">Tarefa</span>)
 <span class="kw">def</span> <span class="fn">buscar_tarefa</span>(id: <span class="cls">str</span>):
@@ -418,7 +418,7 @@ app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</
     )`} />
                 </StepBlock>
 
-                <StepBlock num="05" title="Endpoint: Editar tarefa (PUT)">
+                <StepBlock num="05" title="Endpoint: Editar tarefa (PUT)" forceOpen={exportMode}>
                   <div className="endpoint-row"><span className="method-pill put">PUT</span> /tarefas/{'{id}'}</div>
                   <CodeBlock lang="PYTHON — main.py" html={`<span class="dec">@app.put</span>(<span class="str">"/tarefas/{id}"</span>, response_model=<span class="cls">Tarefa</span>)
 <span class="kw">def</span> <span class="fn">editar_tarefa</span>(id: <span class="cls">str</span>, dados: <span class="cls">TarefaEntrada</span>):
@@ -440,7 +440,7 @@ app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</
                   </InfoBox>
                 </StepBlock>
 
-                <StepBlock num="06" title="Endpoint: Remover tarefa (DELETE)">
+                <StepBlock num="06" title="Endpoint: Remover tarefa (DELETE)" forceOpen={exportMode}>
                   <div className="endpoint-row"><span className="method-pill delete">DELETE</span> /tarefas/{'{id}'}</div>
                   <CodeBlock lang="PYTHON — main.py" html={`<span class="dec">@app.delete</span>(<span class="str">"/tarefas/{id}"</span>, status_code=<span class="num">204</span>)
 <span class="kw">def</span> <span class="fn">remover_tarefa</span>(id: <span class="cls">str</span>):
@@ -464,7 +464,7 @@ app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</
           )}
 
           {/* ── Section 4: Módulo 3 — Arquivo Completo & Boas Práticas ── */}
-          {current === 4 && (
+          {(current === 4 || exportMode) && (
             <LessonSection>
               <div style={{ marginTop: '1.5rem' }}>
                 <div className="card" style={{ marginBottom: '1rem' }}>
@@ -473,7 +473,7 @@ app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</
                   <p className="lead">Juntando tudo — os três arquivos completos, como rodar, testar e salvar no GitHub.</p>
                 </div>
 
-                <StepBlock num="01" title="database.py completo" defaultOpen>
+                <StepBlock num="01" title="database.py completo" defaultOpen forceOpen={exportMode}>
                   <CodeBlock lang="PYTHON — database.py" html={`<span class="kw">import</span> sqlite3
 
 DB_PATH = <span class="str">"tarefas.db"</span>
@@ -496,7 +496,7 @@ DB_PATH = <span class="str">"tarefas.db"</span>
         conn.<span class="fn">commit</span>()`} />
                 </StepBlock>
 
-                <StepBlock num="02" title="models.py completo">
+                <StepBlock num="02" title="models.py completo" forceOpen={exportMode}>
                   <CodeBlock lang="PYTHON — models.py" html={`<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel
 
 <span class="kw">class</span> <span class="cls">TarefaEntrada</span>(BaseModel):
@@ -508,7 +508,7 @@ DB_PATH = <span class="str">"tarefas.db"</span>
     id: <span class="cls">str</span>`} />
                 </StepBlock>
 
-                <StepBlock num="03" title="main.py completo">
+                <StepBlock num="03" title="main.py completo" forceOpen={exportMode}>
                   <CodeBlock lang="PYTHON — main.py completo" html={`<span class="kw">from</span> contextlib <span class="kw">import</span> asynccontextmanager
 <span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI, HTTPException
 <span class="kw">from</span> typing <span class="kw">import</span> List
@@ -580,7 +580,7 @@ app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</
         <span class="kw">raise</span> <span class="fn">HTTPException</span>(status_code=<span class="num">404</span>, detail=<span class="str">"Tarefa não encontrada"</span>)`} />
                 </StepBlock>
 
-                <StepBlock num="04" title="Rodar e testar">
+                <StepBlock num="04" title="Rodar e testar" forceOpen={exportMode}>
                   <CodeBlock lang="BASH" html={`<span class="cmt"># Iniciar o servidor</span>
 uvicorn main:app --reload
 
@@ -600,7 +600,7 @@ curl http://localhost:8000/tarefas
                   </InfoBox>
                 </StepBlock>
 
-                <StepBlock num="05" title="Salvar progresso no GitHub">
+                <StepBlock num="05" title="Salvar progresso no GitHub" forceOpen={exportMode}>
                   <CodeBlock lang="BASH" html={`git add main.py database.py models.py .gitignore
 git commit -m <span class="str">"feat: conecta API ao SQLite para persistência de dados"</span>
 git push`} />
@@ -629,11 +629,27 @@ git push`} />
           )}
 
           {/* ── Section 5: Quiz ── */}
-          {current === 5 && (
+          {(current === 5 || exportMode) && (
             <LessonSection>
               <div className="card" style={{ marginTop: '1.5rem' }}>
                 <div className="section-tag">AVALIAÇÃO</div>
                 <h2>Quiz — Teste seus <span className="accent-text">conhecimentos</span></h2>
+
+                {exportMode ? (
+                  /* Print view: questions only */
+                  <div className="quiz-print-list">
+                    {QUIZ.map((q, i) => (
+                      <div key={i} className="quiz-print-q">
+                        <h3 dangerouslySetInnerHTML={{ __html: q.q }} />
+                        <div className="quiz-print-lines">
+                          <div className="quiz-print-line" />
+                          <div className="quiz-print-line" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                <>
                 <p className="lead">10 questões sobre SQLite, persistência e boas práticas. A explicação aparece após cada resposta.</p>
 
                 <div className="quiz-progress">
@@ -693,6 +709,9 @@ git push`} />
                   </div>
                 )}
 
+                </>
+                )}
+
                 <div className="section-nav" style={{ marginTop: '2rem' }}>
                   <button className="btn-outline" onClick={() => goTo(4)}>← Módulo 3</button>
                   <button className="btn-outline" onClick={() => goTo(1)}>☰ Sumário</button>
@@ -701,8 +720,8 @@ git push`} />
               </div>
             </LessonSection>
           )}
-        </>
-      )}
+          </>
+        )}
     </LessonLayout>
   )
 }
