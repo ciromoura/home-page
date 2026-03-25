@@ -6,7 +6,12 @@
         {
           "title": "FastAPI - Primeiros passos",
           "href": "/aulas/pabd-fastapi",
-          "description": "Material sobre FastAPI para a disciplina de Programação com Acesso a Banco de Dados (PABD)."
+          "description": "Ambiente virtual, httpx, APIs externas, códigos de status HTTP e CRUD completo em memória com FastAPI."
+        },
+        {
+          "title": "FastAPI - Banco de Dados SQLite",
+          "href": "/aulas/pabd-fastapi-db",
+          "description": "Conecte sua API FastAPI ao SQLite para persistir dados entre reinicializações. Inclui database.py, queries parametrizadas e boas práticas."
         }
       ]
     }

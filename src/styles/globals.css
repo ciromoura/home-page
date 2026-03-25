@@ -1129,8 +1129,10 @@ pre .cls { color: #b45309; font-weight: 600; }
     letter-spacing: 0.05em;
 }
 
-.method-pill.get  { background: #22c55e; color: white; }
-.method-pill.post { background: var(--accent-color); color: white; }
+.method-pill.get    { background: #22c55e; color: white; }
+.method-pill.post   { background: var(--accent-color); color: white; }
+.method-pill.put    { background: #f59e0b; color: white; }
+.method-pill.delete { background: #ef4444; color: white; }
 
 /* ===========================
    PABD page: hero + layout
