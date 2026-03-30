@@ -5,8 +5,26 @@ import TruthTableGenerator from '@/components/features/TruthTableGenerator'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Gerador de Tabela Verdade — @ciromoura',
-  description: 'Tabelas verdade para fórmulas da lógica proposicional.',
+  title: 'Gerador de Tabela Verdade Online',
+  description:
+    'Gere tabelas verdade para qualquer fórmula da lógica proposicional. Suporta negação (¬), conjunção (∧), disjunção (∨), condicional (→) e bicondicional (↔). Gratuito e online.',
+  keywords: [
+    'gerador tabela verdade',
+    'tabela verdade online',
+    'lógica proposicional',
+    'operadores lógicos',
+    'negação conjunção disjunção',
+    'condicional bicondicional',
+    'lógica matemática ferramenta',
+    'álgebra booleana',
+  ],
+  openGraph: {
+    title: 'Gerador de Tabela Verdade Online | Ciro Moura',
+    description:
+      'Gere tabelas verdade para fórmulas da lógica proposicional com negação, conjunção, disjunção, condicional e bicondicional. Gratuito.',
+    url: '/ferramentas/tabela-verdade',
+  },
+  alternates: { canonical: '/ferramentas/tabela-verdade' },
 }
 
 export default function TabelaVerdadePage() {

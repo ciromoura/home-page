@@ -3,6 +3,7 @@ import { Open_Sans } from 'next/font/google'
 import Script from 'next/script'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { SITE_URL } from '@/lib/site'
 import '@/styles/globals.css'
 
 const openSans = Open_Sans({
@@ -11,8 +12,47 @@ const openSans = Open_Sans({
 })
 
 export const metadata: Metadata = {
-  title: '@ciromoura',
-  description: 'Portfólio e material didático de Ciro Moura — Professor no IFRN',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Ciro Moura — Professor IFRN',
+    template: '%s | Ciro Moura',
+  },
+  description:
+    'Portfólio de Ciro Moura, professor de informática no IFRN Pau dos Ferros. Material didático, aulas de programação Python e FastAPI, jogos educativos e ferramentas online gratuitas.',
+  keywords: [
+    'professor IFRN',
+    'material didático',
+    'aulas programação',
+    'FastAPI Python',
+    'educação digital',
+    'jogos educativos',
+    'tabela verdade',
+    'planning poker',
+    'Ciro Moura',
+    'IFRN Pau dos Ferros',
+  ],
+  authors: [{ name: 'Ciro Moura', url: SITE_URL }],
+  creator: 'Ciro Moura',
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    siteName: 'Ciro Moura',
+    title: 'Ciro Moura — Professor IFRN',
+    description:
+      'Portfólio e material didático de Ciro Moura, professor de informática no IFRN Pau dos Ferros.',
+    url: SITE_URL,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ciro Moura — Professor IFRN',
+    description:
+      'Portfólio e material didático de Ciro Moura, professor de informática no IFRN Pau dos Ferros.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

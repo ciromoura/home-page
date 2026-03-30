@@ -4,6 +4,35 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import BackgroundBlobs from '@/components/layout/BackgroundBlobs'
 import SkillsSection from '@/components/features/SkillsSection'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Ciro Moura — Professor IFRN | Material Didático Gratuito',
+  description:
+    'Portfólio de Ciro Moura, professor de informática no IFRN Pau dos Ferros. Acesse aulas de programação Python e FastAPI, jogos educativos, ferramentas online e muito mais.',
+  keywords: [
+    'Ciro Moura',
+    'professor IFRN',
+    'IFRN Pau dos Ferros',
+    'material didático',
+    'aulas programação Python',
+    'educação digital',
+    'jogos educativos ensino médio',
+    'ferramentas online professor',
+  ],
+  openGraph: {
+    title: 'Ciro Moura — Professor IFRN | Material Didático Gratuito',
+    description:
+      'Portfólio de Ciro Moura, professor de informática no IFRN Pau dos Ferros. Aulas, jogos educativos e ferramentas online gratuitas.',
+    url: '/',
+  },
+  twitter: {
+    title: 'Ciro Moura — Professor IFRN | Material Didático Gratuito',
+    description:
+      'Portfólio de Ciro Moura, professor de informática no IFRN Pau dos Ferros. Aulas, jogos educativos e ferramentas online gratuitas.',
+  },
+  alternates: { canonical: '/' },
+}
 
 export default function Home() {
   return (

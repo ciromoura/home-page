@@ -6,8 +6,26 @@ import manifest from '@/data/manifests/aulas.json'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Aulas — @ciromoura',
-  description: 'Material didático e tutoriais.',
+  title: 'Aulas de Programação e Educação Digital',
+  description:
+    'Material didático gratuito: aulas de FastAPI com Python, banco de dados SQLite, educação digital, segurança na internet e inteligência artificial generativa. Para alunos do IFRN e autodidatas.',
+  keywords: [
+    'aulas programação',
+    'FastAPI Python tutorial',
+    'banco de dados SQLite',
+    'educação digital',
+    'segurança digital phishing',
+    'IA generativa engenharia de prompt',
+    'material didático IFRN',
+    'aulas online grátis',
+  ],
+  openGraph: {
+    title: 'Aulas de Programação e Educação Digital | Ciro Moura',
+    description:
+      'Material didático gratuito: FastAPI, SQLite, segurança digital e IA generativa. Para alunos do IFRN e autodidatas.',
+    url: '/aulas',
+  },
+  alternates: { canonical: '/aulas' },
 }
 
 export default function AulasPage() {

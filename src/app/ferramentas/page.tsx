@@ -6,8 +6,25 @@ import manifest from '@/data/manifests/ferramentas.json'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Ferramentas — @ciromoura',
-  description: 'Utilitários e ferramentas online.',
+  title: 'Ferramentas Online Gratuitas',
+  description:
+    'Ferramentas web gratuitas para estudantes e professores: gerador de tabela verdade para lógica proposicional e planning poker para estimativas ágeis em equipe. Sem cadastro.',
+  keywords: [
+    'ferramentas online grátis',
+    'gerador tabela verdade',
+    'lógica proposicional online',
+    'planning poker online grátis',
+    'estimativas ágeis scrum',
+    'ferramentas educacionais professor',
+    'utilitários web',
+  ],
+  openGraph: {
+    title: 'Ferramentas Online Gratuitas | Ciro Moura',
+    description:
+      'Tabela verdade e planning poker online. Gratuitos, sem cadastro, direto no navegador.',
+    url: '/ferramentas',
+  },
+  alternates: { canonical: '/ferramentas' },
 }
 
 export default function FerramentasPage() {

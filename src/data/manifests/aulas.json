@@ -1,6 +1,21 @@
 {
   "categories": [
     {
+      "name": "Educação Digital",
+      "items": [
+        {
+          "title": "Segurança Digital: Golpes, Phishing e Malware",
+          "href": "/aulas/educacao-digital-seguranca",
+          "description": "Engenharia social, phishing, malware e protocolos práticos de segurança. Aprenda a identificar golpes e proteger sua vida digital."
+        },
+        {
+          "title": "IA Generativa e Engenharia de Prompt",
+          "href": "/aulas/educacao-digital-ia-generativa",
+          "description": "Como a IA generativa funciona, o que são LLMs e Machine Learning, e como extrair o melhor dessas ferramentas com o método PROMPT."
+        }
+      ]
+    },
+    {
       "name": "Programação com Acesso a Banco de Dados (PABD)",
       "items": [
         {

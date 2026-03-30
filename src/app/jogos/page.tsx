@@ -6,8 +6,24 @@ import manifest from '@/data/manifests/jogos.json'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Jogos — @ciromoura',
-  description: 'Jogos educativos e interativos.',
+  title: 'Jogos Educativos Online',
+  description:
+    'Jogos educativos e interativos para praticar matemática e raciocínio lógico. Desenvolvidos para alunos do ensino médio e técnico. Gratuitos e sem cadastro.',
+  keywords: [
+    'jogos educativos',
+    'jogos matemática online',
+    'jogos raciocínio lógico',
+    'jogos ensino médio',
+    'atividades interativas alunos',
+    'jogos educacionais grátis',
+  ],
+  openGraph: {
+    title: 'Jogos Educativos Online | Ciro Moura',
+    description:
+      'Jogos educativos para praticar matemática e raciocínio lógico. Gratuitos, sem cadastro, direto no navegador.',
+    url: '/jogos',
+  },
+  alternates: { canonical: '/jogos' },
 }
 
 export default function JogosPage() {
