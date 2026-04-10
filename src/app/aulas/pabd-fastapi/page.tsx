@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import LessonLayout from '@/components/features/LessonLayout'
 import LessonSection from '@/components/features/LessonSection'
 import StepBlock from '@/components/features/StepBlock'
@@ -241,6 +242,12 @@ uv --version`} />
                     <InfoBox variant="tip" label="💡 DICA">
                       Após instalar, feche e abra o terminal para que o comando <code>uv</code> seja reconhecido.
                     </InfoBox>
+                    <InfoBox label="🔗 LINKS ALTERNATIVOS">
+                      Para mais formas de instalação, acessse: {' '}
+                      <Link href="https://docs.astral.sh/uv/getting-started/installation/">
+                        https://docs.astral.sh/uv/getting-started/installation/
+                      </Link>
+                    </InfoBox>
                   </StepBlock>
 
                   <StepBlock num="02" title="Criar e inicializar o projeto" forceOpen={exportMode}>
@@ -459,7 +466,7 @@ uv add httpx`} />
                   </div>
 
                   <StepBlock num="01" title="Instalar FastAPI e Uvicorn" defaultOpen forceOpen={exportMode}>
-                    <p>O <strong>Uvicorn</strong> é o servidor ASGI que roda a aplicação FastAPI.</p>
+                    <p>O <strong>Uvicorn</strong> é o servidor ASGI (Asynchronous Server Gateway Interface) que roda a aplicação FastAPI.</p>
                     <CodeBlock lang="BASH" html={`<span class="cmt"># Adicionar dependências com uv</span>
 uv add fastapi uvicorn
 
@@ -535,7 +542,7 @@ tarefas_db: List[<span class="cls">Tarefa</span>] = []
 <span class="cmt"># Acesse: http://localhost:8000</span>
 <span class="cmt"># Docs:   http://localhost:8000/docs</span>`} />
                     <InfoBox variant="tip" label="💡 TESTE">
-                      Abra <strong>http://localhost:8000/docs</strong> no navegador. Você verá a documentação Swagger interativa — clique em &quot;Try it out&quot; para criar e listar tarefas diretamente!
+                      Abra <strong><Link href={'http://localhost:8000/docs'} target='_blank'>http://localhost:8000/docs</Link></strong> {' '} no navegador. Você verá a documentação Swagger interativa — clique em &quot;Try it out&quot; para criar e listar tarefas diretamente!
                     </InfoBox>
                   </StepBlock>
 

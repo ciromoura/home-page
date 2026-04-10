@@ -7,7 +7,7 @@ import SkillsSection from '@/components/features/SkillsSection'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Ciro Moura — Professor IFRN | Material Didático Gratuito',
+  title: 'Ciro Moura — Professor IFRN',
   description:
     'Portfólio de Ciro Moura, professor de informática no IFRN Pau dos Ferros. Acesse aulas de programação Python e FastAPI, jogos educativos, ferramentas online e muito mais.',
   keywords: [
@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     'ferramentas online professor',
   ],
   openGraph: {
-    title: 'Ciro Moura — Professor IFRN | Material Didático Gratuito',
+    title: 'Ciro Moura — Professor IFRN',
     description:
       'Portfólio de Ciro Moura, professor de informática no IFRN Pau dos Ferros. Aulas, jogos educativos e ferramentas online gratuitas.',
     url: '/',
   },
   twitter: {
-    title: 'Ciro Moura — Professor IFRN | Material Didático Gratuito',
+    title: 'Ciro Moura — Professor IFRN',
     description:
       'Portfólio de Ciro Moura, professor de informática no IFRN Pau dos Ferros. Aulas, jogos educativos e ferramentas online gratuitas.',
   },
@@ -121,11 +121,6 @@ export default function Home() {
                     <li>
                       <a href="http://lattes.cnpq.br/6573088805666433" target="_blank" rel="noopener noreferrer">
                         <img src="https://img.shields.io/badge/-Lattes-gray?style=flat-square" alt="Lattes" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://ciromoura.com.br/" target="_blank" rel="noopener noreferrer">
-                        <img src="https://img.shields.io/badge/-Blog-21759B?style=flat-square&logo=WordPress&logoColor=white" alt="Blog (WordPress)" />
                       </a>
                     </li>
                     <li>
