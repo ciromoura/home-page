@@ -17,6 +17,11 @@
           "title": "Planning Poker",
           "href": "/ferramentas/planning-poker",
           "description": "Estime tarefas em equipe com votação colaborativa em tempo real via WebRTC."
+        },
+        {
+          "title": "Quadro Kanban",
+          "href": "/ferramentas/kanban",
+          "description": "Organize tarefas em colunas com drag and drop. Salva no navegador e compartilha via link."
         }
       ]
     }
