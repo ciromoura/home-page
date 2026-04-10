@@ -75,12 +75,36 @@ export default function SomandoPage() {
     let animationId = 0
     let frameCount = 0
     let timeLeft = GAME_DURATION
+    let touchTargetX: number | null = null
 
     const player = { x: CANVAS_W / 2, y: CANVAS_H - 100, width: 30, speed: 7, count: 1, color: '#FFD700' }
     let objects: FallingObj[] = []
 
     const onKeyDown = (e: KeyboardEvent) => { if (e.code in keys) keys[e.code as keyof typeof keys] = true }
     const onKeyUp = (e: KeyboardEvent) => { if (e.code in keys) keys[e.code as keyof typeof keys] = false }
+
+    function getCanvasX(clientX: number): number {
+      const rect = canvas!.getBoundingClientRect()
+      const scaleX = CANVAS_W / rect.width
+      return (clientX - rect.left) * scaleX
+    }
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (!gameRunning) return
+      e.preventDefault()
+      touchTargetX = getCanvasX(e.clientX)
+    }
+    const onPointerMove = (e: PointerEvent) => {
+      if (!gameRunning || e.buttons === 0) return
+      e.preventDefault()
+      touchTargetX = getCanvasX(e.clientX)
+    }
+    const onPointerUp = () => { touchTargetX = null }
+
+    canvas.addEventListener('pointerdown', onPointerDown, { passive: false })
+    canvas.addEventListener('pointermove', onPointerMove, { passive: false })
+    canvas.addEventListener('pointerup', onPointerUp)
+    canvas.addEventListener('pointercancel', onPointerUp)
 
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
@@ -133,6 +157,12 @@ export default function SomandoPage() {
       if (!gameRunning) return
       if (keys.ArrowLeft && player.x > 30) player.x -= player.speed
       if (keys.ArrowRight && player.x < CANVAS_W - 30) player.x += player.speed
+      if (touchTargetX !== null) {
+        const dx = touchTargetX - player.x
+        if (Math.abs(dx) < player.speed) player.x = touchTargetX
+        else player.x += Math.sign(dx) * player.speed
+        player.x = Math.max(30, Math.min(CANVAS_W - 30, player.x))
+      }
       if (frameCount % 45 === 0) objects.push(makeFallingObj())
 
       for (let i = objects.length - 1; i >= 0; i--) {
@@ -195,6 +225,7 @@ export default function SomandoPage() {
       frameCount = 0
       keys.ArrowLeft = false
       keys.ArrowRight = false
+      touchTargetX = null
       gameRunning = true
       gameRunningRef.current = true
       setOverlay(null)
@@ -209,6 +240,10 @@ export default function SomandoPage() {
       cancelAnimationFrame(animationId)
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
+      canvas.removeEventListener('pointerdown', onPointerDown)
+      canvas.removeEventListener('pointermove', onPointerMove)
+      canvas.removeEventListener('pointerup', onPointerUp)
+      canvas.removeEventListener('pointercancel', onPointerUp)
     }
   }, [])
 
