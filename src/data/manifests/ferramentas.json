@@ -1,12 +1,17 @@
 {
   "categories": [
     {
-      "name": "Lógica",
+      "name": "Lógica e Numeração",
       "items": [
         {
           "title": "Gerador de Tabela Verdade",
           "href": "/ferramentas/tabela-verdade",
           "description": "Tabelas verdade para fórmulas da lógica proposicional."
+        },
+        {
+          "title": "Conversor de Bases",
+          "href": "/ferramentas/conversor-bases",
+          "description": "Converta números entre decimal, binário e hexadecimal com animação passo a passo."
         }
       ]
     },
