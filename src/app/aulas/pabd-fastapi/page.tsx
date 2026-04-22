@@ -264,7 +264,7 @@ cd minha-api`} />
                     <p>Ative o ambiente — Linux / macOS:</p>
                     <CodeBlock lang="BASH — Linux / macOS" html={`source .venv/bin/activate`} />
                     <p>Ative o ambiente — Windows:</p>
-                    <CodeBlock lang="POWERSHELL — Windows" html={`.venv\Scripts\activate`} />
+                    <CodeBlock lang="POWERSHELL — Windows" html=".venv\Scripts\activate" />
                     <p>Quando ativo, o prefixo <code>(minha-api)</code> aparece no terminal.</p>
                   </StepBlock>
 
