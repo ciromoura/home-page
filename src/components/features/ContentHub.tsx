@@ -8,6 +8,8 @@ export interface ManifestItem {
 
 export interface ManifestCategory {
   name: string
+  sigla?: string
+  cor?: string
   items: ManifestItem[]
 }
 

@@ -1,7 +1,7 @@
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import BackgroundBlobs from '@/components/layout/BackgroundBlobs'
-import ContentHub from '@/components/features/ContentHub'
+import AulasHub from '@/components/features/AulasHub'
 import manifest from '@/data/manifests/aulas.json'
 import type { Metadata } from 'next'
 
@@ -49,7 +49,7 @@ export default function AulasPage() {
 
         <section className="section skills-section" style={{ paddingTop: 0 }}>
           <div className="container">
-            <ContentHub categories={manifest.categories} />
+            <AulasHub categories={manifest.categories} />
           </div>
         </section>
       </main>

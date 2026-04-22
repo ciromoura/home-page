@@ -3293,3 +3293,227 @@ pre .cls { color: #b45309; font-weight: 600; }
     .bc-tab-sub   { display: none; }
 }
 
+/* ===========================
+   AulasHub — busca, filtro e paginação
+   =========================== */
+.aulas-hub {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.aulas-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.aulas-search-wrap {
+    position: relative;
+}
+
+.aulas-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.45;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+.aulas-search {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    font-size: 0.92rem;
+    font-family: inherit;
+}
+
+.aulas-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filter-pill {
+    padding: 5px 14px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text-color);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.filter-pill:hover {
+    background: var(--glass-bg-hover);
+    transform: translateY(-1px);
+}
+
+.filter-pill.active {
+    background: var(--pill-color, var(--accent-color));
+    border-color: var(--pill-color, var(--accent-color));
+    color: white;
+}
+
+.aulas-results-info {
+    font-size: 0.82rem;
+    opacity: 0.55;
+}
+
+.aulas-page-info {
+    opacity: 1;
+}
+
+/* Grid de cards compactos */
+.aulas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.9rem;
+}
+
+.aulas-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.aulas-card:hover {
+    transform: translateY(-4px);
+    background: var(--glass-bg-hover);
+    color: var(--text-color);
+    box-shadow: 0 14px 36px rgba(31, 38, 135, 0.2);
+}
+
+.aulas-card-badge {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 2px 9px;
+    border-radius: 99px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--badge-color, var(--accent-color)) 15%, transparent);
+    color: var(--badge-color, var(--accent-color));
+    border: 1px solid color-mix(in srgb, var(--badge-color, var(--accent-color)) 30%, transparent);
+    margin-bottom: 2px;
+}
+
+.aulas-card-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.35;
+}
+
+.aulas-card-desc {
+    font-size: 0.78rem;
+    opacity: 0.6;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+
+.aulas-card .item-arrow {
+    position: absolute;
+    bottom: 14px;
+    right: 16px;
+    opacity: 0.35;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.aulas-card:hover .item-arrow {
+    opacity: 0.8;
+    transform: translateX(4px);
+}
+
+/* Paginação */
+.aulas-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+}
+
+.page-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.page-num {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text-color);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.page-num:hover {
+    background: var(--glass-bg-hover);
+}
+
+.page-num.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .aulas-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .page-btn span { display: none; }
+    .page-btn { padding: 8px 12px; }
+}
+
+@media (max-width: 400px) {
+    .aulas-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

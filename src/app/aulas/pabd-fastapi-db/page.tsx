@@ -581,20 +581,16 @@ app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</
                 </StepBlock>
 
                 <StepBlock num="04" title="Rodar e testar" forceOpen={exportMode}>
-                  <CodeBlock lang="BASH" html={`<span class="cmt"># Iniciar o servidor</span>
-uvicorn main:app --reload
-
-<span class="cmt"># Ao iniciar, init_db() é chamado e tarefas.db é criado automaticamente</span>
-<span class="cmt"># Acesse: http://localhost:8000/docs</span>`} />
-                  <CodeBlock lang="BASH — testar com curl" html={`<span class="cmt"># Criar uma tarefa</span>
-curl -X POST http://localhost:8000/tarefas \
+                  <p>Inicie o servidor:</p>
+                  <CodeBlock lang="BASH" html={`uvicorn main:app --reload`} />
+                  <p>Ao iniciar, <code>init_db()</code> é chamado e <code>tarefas.db</code> é criado automaticamente. Acesse a documentação em <code>http://localhost:8000/docs</code>.</p>
+                  <p>Crie uma tarefa:</p>
+                  <CodeBlock lang="BASH" html={`curl -X POST http://localhost:8000/tarefas \
   -H <span class="str">"Content-Type: application/json"</span> \
-  -d <span class="str">'{"titulo": "Estudar SQLite", "descricao": "Praticar queries"}'</span>
-
-<span class="cmt"># Listar todas</span>
-curl http://localhost:8000/tarefas
-
-<span class="cmt"># Reiniciar o servidor e listar novamente — dados persistem!</span></span>`} />
+  -d <span class="str">'{"titulo": "Estudar SQLite", "descricao": "Praticar queries"}'</span>`} />
+                  <p>Liste todas as tarefas:</p>
+                  <CodeBlock lang="BASH" html={`curl http://localhost:8000/tarefas`} />
+                  <p>Reinicie o servidor (<code>Ctrl+C</code> e <code>uvicorn main:app --reload</code>) e liste novamente — os dados ainda estarão lá.</p>
                   <InfoBox variant="tip" label="💡 DICA">
                     Pare o servidor com <code>Ctrl+C</code>, inicie novamente com <code>uvicorn main:app --reload</code> e liste as tarefas. Os dados ainda estão lá — essa é a diferença do banco de dados!
                   </InfoBox>

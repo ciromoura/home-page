@@ -2,6 +2,8 @@
   "categories": [
     {
       "name": "Educação Digital",
+      "sigla": "ED",
+      "cor": "#10b981",
       "items": [
         {
           "title": "Segurança Digital: Golpes, Phishing e Malware",
@@ -17,6 +19,8 @@
     },
     {
       "name": "Programação com Acesso a Banco de Dados (PABD)",
+      "sigla": "PABD",
+      "cor": "#6366f1",
       "items": [
         {
           "title": "FastAPI - Primeiros passos",

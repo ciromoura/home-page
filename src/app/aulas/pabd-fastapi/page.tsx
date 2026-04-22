@@ -122,7 +122,7 @@ const QUIZ = [
   },
 ]
 
-const SECTION_LABELS = ['Início', 'Sumário', 'Módulo 1', 'Módulo 2', 'Módulo 3', 'Módulo 4', 'Quiz']
+const SECTION_LABELS = ['Início', 'Sumário', 'Módulo 1', 'Módulo 2', 'Módulo 3', 'Módulo 4', 'Módulo 5', 'Quiz']
 
 /* ─── Main component ────────────────────────────────────────── */
 export default function PABDPage() {
@@ -163,7 +163,7 @@ export default function PABDPage() {
                   <p>Do ambiente virtual ao CRUD completo em memória — aprenda a criar APIs modernas passo a passo, sem enrolação.</p>
                   <div className="pabd-hero-cta">
                     <button className="btn-primary btn-pabd" onClick={() => goTo(1)}>▶ Começar Aula</button>
-                    <button className="btn-outline btn-pabd" onClick={() => goTo(6)}>⚡ Ir ao Quiz</button>
+                    <button className="btn-outline btn-pabd" onClick={() => goTo(7)}>⚡ Ir ao Quiz</button>
                   </div>
                 </div>
               </LessonSection>
@@ -180,9 +180,9 @@ export default function PABDPage() {
                   <div className="toc-progress-row">
                     <span>PROGRESSO</span>
                     <div className="toc-progress-bar">
-                      <div className="toc-progress-fill" style={{ width: `${(visited.filter(v => [2,3,4,5].includes(v)).length / 4) * 100}%` }} />
+                      <div className="toc-progress-fill" style={{ width: `${(visited.filter(v => [2,3,4,5,6].includes(v)).length / 5) * 100}%` }} />
                     </div>
-                    <span>{visited.filter(v => [2,3,4,5].includes(v)).length} / 4</span>
+                    <span>{visited.filter(v => [2,3,4,5,6].includes(v)).length} / 5</span>
                   </div>
 
                   <div className="toc-grid">
@@ -191,6 +191,7 @@ export default function PABDPage() {
                       { n: 3, num: '02', title: 'Consumindo APIs Externas', desc: 'httpx, BrasilAPI, códigos de status HTTP' },
                       { n: 4, num: '03', title: 'Primeiros passos com FastAPI', desc: 'POST e GET — criar e listar tarefas em memória' },
                       { n: 5, num: '04', title: 'CRUD Completo', desc: 'PUT e DELETE — editar e remover tarefas' },
+                      { n: 6, num: '05', title: 'Entendendo o Código', desc: 'Linha a linha: como cada parte do main.py funciona' },
                     ].map(({ n, num, title, desc }) => (
                       <button key={n} className={`toc-card${visited.includes(n) ? ' visited' : ''}`} onClick={() => goTo(n)}>
                         <div className="toc-num">{num}</div>
@@ -198,7 +199,7 @@ export default function PABDPage() {
                         <div className="toc-arrow">→</div>
                       </button>
                     ))}
-                    <button className={`toc-card${visited.includes(6) ? ' visited' : ''}`} onClick={() => goTo(6)}>
+                    <button className={`toc-card${visited.includes(7) ? ' visited' : ''}`} onClick={() => goTo(7)}>
                       <div className="toc-num quiz-num">⚡</div>
                       <div className="toc-content"><h3>Quiz Final</h3><p>10 questões para testar o que você aprendeu</p></div>
                       <div className="toc-arrow">→</div>
@@ -231,10 +232,8 @@ export default function PABDPage() {
 
                   <StepBlock num="01" title="Instalar o uv" defaultOpen forceOpen={exportMode}>
                     <p>Execute no terminal conforme seu sistema operacional:</p>
-                    <CodeBlock lang="BASH — Linux / macOS" html={`<span class="cmt"># Instalação com curl</span>
-curl -LsSf https://astral.sh/uv/install.sh | sh
+                    <CodeBlock lang="BASH — Linux / macOS" html={`curl -LsSf https://astral.sh/uv/install.sh | sh
 
-<span class="cmt"># Verificar versão instalada</span>
 uv --version`} />
                     <CodeBlock lang="POWERSHELL — Windows" html={`irm https://astral.sh/uv/install.ps1 | iex
 
@@ -252,36 +251,30 @@ uv --version`} />
 
                   <StepBlock num="02" title="Criar e inicializar o projeto" forceOpen={exportMode}>
                     <p>O comando <code>uv init</code> cria a estrutura de pastas e o arquivo <code>pyproject.toml</code> com as configurações do projeto.</p>
-                    <CodeBlock lang="BASH" html={`<span class="cmt"># Criar pasta do projeto</span>
-uv init minha-api
-cd minha-api
-
-<span class="cmt"># Estrutura criada:</span>
-<span class="cmt"># minha-api/</span>
-<span class="cmt"># ├── pyproject.toml   ← configurações</span>
-<span class="cmt"># ├── README.md</span>
-<span class="cmt"># └── hello.py</span>`} />
+                    <CodeBlock lang="BASH" html={`uv init minha-api
+cd minha-api`} />
+                    <p>Estrutura criada pelo <code>uv init</code>:</p>
+                    <CodeBlock lang="ESTRUTURA" html={`minha-api/
+├── pyproject.toml   <span class="cmt">← configurações</span>
+├── README.md
+└── hello.py`} />
                     <p>Agora crie e ative o ambiente virtual:</p>
-                    <CodeBlock lang="BASH" html={`<span class="cmt"># Criar ambiente virtual (.venv)</span>
-uv venv
-
-<span class="cmt"># Ativar — Linux/macOS</span>
-source .venv/bin/activate
-
-<span class="cmt"># Ativar — Windows</span>
-.venv\Scripts\activate
-
-<span class="cmt"># O prefixo (minha-api) aparece no terminal quando ativo</span>`} />
+                    <p>Crie o ambiente virtual:</p>
+                    <CodeBlock lang="BASH" html={`uv venv`} />
+                    <p>Ative o ambiente — Linux / macOS:</p>
+                    <CodeBlock lang="BASH — Linux / macOS" html={`source .venv/bin/activate`} />
+                    <p>Ative o ambiente — Windows:</p>
+                    <CodeBlock lang="POWERSHELL — Windows" html={`.venv\Scripts\activate`} />
+                    <p>Quando ativo, o prefixo <code>(minha-api)</code> aparece no terminal.</p>
                   </StepBlock>
 
                   <StepBlock num="03" title="Conectar ao GitHub" forceOpen={exportMode}>
                     <p>Versionar o código permite colaborar, voltar a versões anteriores e publicar o projeto.</p>
-                    <CodeBlock lang="BASH — configurar git" html={`<span class="cmt"># Configuração inicial (apenas uma vez)</span>
-git config --global user.name <span class="str">"Seu Nome"</span>
-git config --global user.email <span class="str">"seu@email.com"</span>
-
-<span class="cmt"># Inicializar repositório no projeto</span>
-git init
+                    <p>Configuração inicial do Git (apenas uma vez):</p>
+                    <CodeBlock lang="BASH" html={`git config --global user.name <span class="str">"Seu Nome"</span>
+git config --global user.email <span class="str">"seu@email.com"</span>`} />
+                    <p>Inicialize o repositório no projeto:</p>
+                    <CodeBlock lang="BASH" html={`git init
 git add .
 git commit -m <span class="str">"feat: projeto inicial"</span>`} />
                     <p>Crie o arquivo <code>.gitignore</code> para não enviar a pasta <code>.venv</code> ao GitHub:</p>
@@ -338,8 +331,8 @@ git push -u origin main`} />
                   </div>
 
                   <StepBlock num="01" title="Instalar httpx" defaultOpen forceOpen={exportMode}>
-                    <CodeBlock lang="BASH" html={`<span class="cmt"># Adicionar httpx ao projeto</span>
-uv add httpx`} />
+                    <p>Adicione o httpx ao projeto:</p>
+                    <CodeBlock lang="BASH" html={`uv add httpx`} />
                     <InfoBox variant="tip" label="💡 DICA">
                       O <code>uv add</code> instala e já registra a dependência no <code>pyproject.toml</code> automaticamente.
                     </InfoBox>
@@ -467,11 +460,10 @@ uv add httpx`} />
 
                   <StepBlock num="01" title="Instalar FastAPI e Uvicorn" defaultOpen forceOpen={exportMode}>
                     <p>O <strong>Uvicorn</strong> é o servidor ASGI (Asynchronous Server Gateway Interface) que roda a aplicação FastAPI.</p>
-                    <CodeBlock lang="BASH" html={`<span class="cmt"># Adicionar dependências com uv</span>
-uv add fastapi uvicorn
-
-<span class="cmt"># Verificar o que foi instalado</span>
-uv pip list`} />
+                    <p>Adicione as dependências ao projeto:</p>
+                    <CodeBlock lang="BASH" html={`uv add fastapi uvicorn`} />
+                    <p>Verifique o que foi instalado:</p>
+                    <CodeBlock lang="BASH" html={`uv pip list`} />
                     <InfoBox variant="tip" label="💡 DICA">
                       O <code>uv add</code> além de instalar já registra a dependência no <code>pyproject.toml</code> e gera o lockfile <code>uv.lock</code> automaticamente.
                     </InfoBox>
@@ -536,11 +528,8 @@ tarefas_db: List[<span class="cls">Tarefa</span>] = []
                   </StepBlock>
 
                   <StepBlock num="05" title="Rodar a aplicação" forceOpen={exportMode}>
-                    <CodeBlock lang="BASH" html={`uvicorn main:app --reload
-
-<span class="cmt"># --reload reinicia automaticamente ao salvar arquivos</span>
-<span class="cmt"># Acesse: http://localhost:8000</span>
-<span class="cmt"># Docs:   http://localhost:8000/docs</span>`} />
+                    <p>A flag <code>--reload</code> reinicia o servidor automaticamente ao salvar arquivos. Após iniciar, acesse <code>http://localhost:8000</code> ou a documentação em <code>http://localhost:8000/docs</code>.</p>
+                    <CodeBlock lang="BASH" html={`uvicorn main:app --reload`} />
                     <InfoBox variant="tip" label="💡 TESTE">
                       Abra <strong><Link href={'http://localhost:8000/docs'} target='_blank'>http://localhost:8000/docs</Link></strong> {' '} no navegador. Você verá a documentação Swagger interativa — clique em &quot;Try it out&quot; para criar e listar tarefas diretamente!
                     </InfoBox>
@@ -727,14 +716,315 @@ tarefas_db: List[<span class="cls">Tarefa</span>] = []
 
                   <div className="section-nav">
                     <button className="btn-outline" onClick={() => goTo(4)}>← Módulo 3</button>
-                    <button className="btn-primary btn-pabd" onClick={() => goTo(6)}>Quiz →</button>
+                    <button className="btn-primary btn-pabd" onClick={() => goTo(6)}>Módulo 5 →</button>
                   </div>
                 </div>
               </LessonSection>
             )}
 
-            {/* ── Section 6: Quiz ── */}
+            {/* ── Section 6: Módulo 5 — Entendendo o Código ── */}
             {(current === 6 || exportMode) && (
+              <LessonSection>
+                <div style={{ marginTop: '1.5rem' }}>
+                  <div className="card" style={{ marginBottom: '1rem' }}>
+                    <div className="section-tag">MÓDULO 05</div>
+                    <h2>Linha a Linha: <span className="accent-text">Entendendo o Código</span></h2>
+                    <p className="lead">Agora que a API funciona, vamos dissecar cada parte do <code>main.py</code>. Entender o porquê de cada linha é o que transforma um copista em um programador.</p>
+                  </div>
+
+                  {/* Ilustração: ciclo de uma requisição */}
+                  <div className="card" style={{ marginBottom: '1rem' }}>
+                    <div className="section-tag">ILUSTRAÇÃO</div>
+                    <h3 style={{ marginBottom: '0.75rem' }}>O caminho de uma requisição</h3>
+                    <p style={{ fontSize: '0.88rem', opacity: 0.7, marginBottom: '1.25rem' }}>Cada vez que você chama a API, sua requisição percorre este caminho até virar uma resposta:</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', flexWrap: 'wrap', padding: '0.25rem 0 1.25rem' }}>
+                      {[
+                        { icon: '🖥️', title: 'Cliente', sub: 'Navegador, curl, app' },
+                        { arrow: true },
+                        { icon: '📨', title: 'HTTP Request', sub: 'GET /tarefas/123' },
+                        { arrow: true },
+                        { icon: '⚡', title: 'Uvicorn', sub: 'Servidor ASGI' },
+                        { arrow: true },
+                        { icon: '🔍', title: 'FastAPI', sub: 'Rota + Pydantic' },
+                        { arrow: true },
+                        { icon: '⚙️', title: 'Sua função', sub: 'def buscar_tarefa()' },
+                        { arrow: true },
+                        { icon: '📤', title: 'JSON Response', sub: '200 OK + dados' },
+                      ].map((item, i) =>
+                        'arrow' in item ? (
+                          <div key={i} style={{ color: 'var(--accent-color)', fontSize: '1.1rem', fontWeight: 700, flexShrink: 0 }}>→</div>
+                        ) : (
+                          <div key={i} style={{ padding: '10px 12px', borderRadius: '10px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', textAlign: 'center', minWidth: '88px' }}>
+                            <div style={{ fontSize: '1.3rem', marginBottom: '4px' }}>{item.icon}</div>
+                            <div style={{ fontSize: '0.72rem', fontWeight: 700 }}>{item.title}</div>
+                            <div style={{ fontSize: '0.6rem', opacity: 0.5, marginTop: '2px' }}>{item.sub}</div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                    <InfoBox label="📌 RESUMO">
+                      O <strong>Uvicorn</strong> fica escutando a porta 8000. Quando chega uma requisição, ele entrega ao <strong>FastAPI</strong>, que identifica a rota e valida os dados com <strong>Pydantic</strong>. O FastAPI chama sua função Python e o retorno vira um <strong>JSON</strong> que volta ao cliente.
+                    </InfoBox>
+                  </div>
+
+                  <StepBlock num="01" title="Imports — cada ferramenta tem seu papel" defaultOpen forceOpen={exportMode}>
+                    <CodeBlock lang="PYTHON — main.py" html={`<span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI, HTTPException
+<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel
+<span class="kw">from</span> typing <span class="kw">import</span> List
+<span class="kw">import</span> uuid`} />
+                    <div className="feature-card-grid" style={{ marginTop: '0.75rem' }}>
+                      <div className="feature-card">
+                        <div className="card-icon">🏗️</div>
+                        <h3><code>FastAPI</code></h3>
+                        <p>Classe da aplicação. Guarda todas as rotas, configurações e middlewares do projeto.</p>
+                      </div>
+                      <div className="feature-card">
+                        <div className="card-icon">🚨</div>
+                        <h3><code>HTTPException</code></h3>
+                        <p>Interrompe a execução e retorna imediatamente um erro HTTP com código e mensagem para o cliente.</p>
+                      </div>
+                      <div className="feature-card">
+                        <div className="card-icon">✅</div>
+                        <h3><code>BaseModel</code></h3>
+                        <p>Classe base do Pydantic. Herdar dela transforma uma classe Python num schema de validação automática.</p>
+                      </div>
+                      <div className="feature-card">
+                        <div className="card-icon">📝</div>
+                        <h3><code>List</code></h3>
+                        <p>Anotação de tipo para listas. Em Python 3.9+ você pode escrever <code>list[Tarefa]</code> diretamente.</p>
+                      </div>
+                      <div className="feature-card">
+                        <div className="card-icon">🔑</div>
+                        <h3><code>uuid</code></h3>
+                        <p><code>uuid4()</code> gera IDs únicos de 128 bits — praticamente impossível de repetir ou adivinhar.</p>
+                      </div>
+                    </div>
+                  </StepBlock>
+
+                  <StepBlock num="02" title="Modelos Pydantic — o contrato dos dados" forceOpen={exportMode}>
+                    <CodeBlock lang="PYTHON" html={`<span class="kw">class</span> <span class="cls">TarefaEntrada</span>(BaseModel):
+    titulo: <span class="cls">str</span>
+    descricao: <span class="cls">str</span>
+    concluida: <span class="cls">bool</span> = <span class="kw">False</span>
+
+<span class="kw">class</span> <span class="cls">Tarefa</span>(<span class="cls">TarefaEntrada</span>):
+    id: <span class="cls">str</span>`} />
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '1rem 0' }}>
+                      <div style={{ border: '2px solid var(--accent-color)', borderRadius: '12px', padding: '14px 28px', background: 'color-mix(in srgb, var(--accent-color) 8%, transparent)', textAlign: 'center', minWidth: '260px' }}>
+                        <div style={{ fontWeight: 800, color: 'var(--accent-color)', marginBottom: '8px' }}>TarefaEntrada</div>
+                        <div style={{ fontSize: '0.78rem', opacity: 0.75, lineHeight: 1.8, fontFamily: 'monospace' }}>
+                          titulo: str<br />descricao: str<br />concluida: bool = False
+                        </div>
+                        <div style={{ fontSize: '0.65rem', marginTop: '8px', opacity: 0.5 }}>📨 O que o cliente envia no body (POST / PUT)</div>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--accent-color)', padding: '4px 0', lineHeight: 1.2 }}>
+                        <span style={{ fontSize: '1.2rem' }}>↓</span>
+                        <span style={{ fontSize: '0.65rem', opacity: 0.55 }}>herda e adiciona</span>
+                      </div>
+                      <div style={{ border: '2px solid var(--secondary-color)', borderRadius: '12px', padding: '14px 28px', background: 'color-mix(in srgb, var(--secondary-color) 8%, transparent)', textAlign: 'center', minWidth: '260px' }}>
+                        <div style={{ fontWeight: 800, color: 'var(--secondary-color)', marginBottom: '8px' }}>Tarefa</div>
+                        <div style={{ fontSize: '0.78rem', opacity: 0.75, lineHeight: 1.8, fontFamily: 'monospace' }}>
+                          titulo: str<br />descricao: str<br />concluida: bool = False<br />
+                          <span style={{ color: 'var(--secondary-color)', fontWeight: 700 }}>id: str ← adicionado pelo servidor</span>
+                        </div>
+                        <div style={{ fontSize: '0.65rem', marginTop: '8px', opacity: 0.5 }}>📤 O que a API retorna na resposta (com ID)</div>
+                      </div>
+                    </div>
+                    <InfoBox label="📌 POR QUE DOIS MODELOS?">
+                      O cliente <strong>não envia</strong> o ID — ele é gerado pelo servidor com <code>uuid4()</code>. Se usássemos um único modelo com <code>id</code> obrigatório, o FastAPI exigiria que o cliente enviasse um ID no body, o que não faz sentido. Dois modelos separam claramente <em>entrada</em> (o que chega) de <em>saída</em> (o que é retornado).
+                    </InfoBox>
+                  </StepBlock>
+
+                  <StepBlock num="03" title='A instância "app" e a lista em memória' forceOpen={exportMode}>
+                    <CodeBlock lang="PYTHON" html={`app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</span>, version=<span class="str">"1.0.0"</span>)
+
+tarefas_db: List[<span class="cls">Tarefa</span>] = []`} />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', margin: '0.75rem 0' }}>
+                      <div style={{ padding: '16px', borderRadius: '12px', border: '1px solid var(--glass-border)', background: 'var(--glass-bg)' }}>
+                        <div style={{ fontSize: '1.4rem', marginBottom: '8px' }}>🏗️</div>
+                        <div style={{ fontWeight: 700, fontSize: '0.85rem', marginBottom: '4px' }}>O objeto <code>app</code></div>
+                        <div style={{ fontSize: '0.78rem', opacity: 0.7, lineHeight: 1.5 }}>É a aplicação inteira. Todos os decorators <code>@app.get</code>, <code>@app.post</code> etc. registram rotas nele. O Uvicorn recebe este objeto para servir as requisições.</div>
+                      </div>
+                      <div style={{ padding: '16px', borderRadius: '12px', border: '1px solid var(--glass-border)', background: 'var(--glass-bg)' }}>
+                        <div style={{ fontSize: '1.4rem', marginBottom: '8px' }}>📋</div>
+                        <div style={{ fontWeight: 700, fontSize: '0.85rem', marginBottom: '4px' }}>A lista <code>tarefas_db</code></div>
+                        <div style={{ fontSize: '0.78rem', opacity: 0.7, lineHeight: 1.5 }}>Lista Python comum que simula um banco de dados. Existe só enquanto o servidor roda — reiniciar apaga tudo. Na Aula 2, substituímos pelo SQLite.</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                      <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.06)', textAlign: 'center' }}>
+                        <div style={{ fontSize: '1.6rem' }}>💨</div>
+                        <div style={{ fontWeight: 700, fontSize: '0.8rem', margin: '6px 0 4px' }}>Memória RAM (Aula 1)</div>
+                        <div style={{ fontSize: '0.72rem', opacity: 0.65, lineHeight: 1.5 }}>Rápida, mas volátil<br />Reiniciou → dados sumem</div>
+                      </div>
+                      <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid rgba(34,197,94,0.4)', background: 'rgba(34,197,94,0.06)', textAlign: 'center' }}>
+                        <div style={{ fontSize: '1.6rem' }}>💾</div>
+                        <div style={{ fontWeight: 700, fontSize: '0.8rem', margin: '6px 0 4px' }}>Disco / SQLite (Aula 2)</div>
+                        <div style={{ fontSize: '0.72rem', opacity: 0.65, lineHeight: 1.5 }}>Persistente<br />Reiniciou → dados lá</div>
+                      </div>
+                    </div>
+                  </StepBlock>
+
+                  <StepBlock num="04" title="Anatomia de um endpoint" forceOpen={exportMode}>
+                    <p>Todos os endpoints seguem a mesma estrutura. Veja o POST como referência:</p>
+                    <CodeBlock lang="PYTHON" html={`<span class="dec">@app.post</span>(<span class="str">"/tarefas"</span>, response_model=<span class="cls">Tarefa</span>, status_code=<span class="num">201</span>)
+<span class="kw">def</span> <span class="fn">criar_tarefa</span>(dados: <span class="cls">TarefaEntrada</span>):
+    nova = <span class="cls">Tarefa</span>(id=<span class="cls">str</span>(uuid.<span class="fn">uuid4</span>()), **dados.<span class="fn">model_dump</span>())
+    tarefas_db.<span class="fn">append</span>(nova)
+    <span class="kw">return</span> nova`} />
+                    <div style={{ border: '1px solid var(--glass-border)', borderRadius: '14px', padding: '1.25rem', margin: '0.75rem 0', background: 'var(--glass-bg)' }}>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 700, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1rem' }}>PARTES DO ENDPOINT</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                        {[
+                          { color: '#6366f1', label: '@app.post', desc: 'Decorator que registra a função como rota e define o método HTTP. Também existe @app.get, @app.put e @app.delete.' },
+                          { color: '#10b981', label: '"/tarefas"', desc: 'Caminho (path) da URL. Combinado com o método HTTP identifica o endpoint de forma única.' },
+                          { color: '#f59e0b', label: 'response_model=Tarefa', desc: 'Schema da resposta. FastAPI usa este modelo para serializar o retorno e gerar a documentação Swagger automaticamente.' },
+                          { color: '#ef4444', label: 'status_code=201', desc: 'Código HTTP retornado em caso de sucesso. 201 = Created. Sem especificar, o padrão seria 200 OK.' },
+                          { color: '#8b5cf6', label: 'dados: TarefaEntrada', desc: 'FastAPI lê o body JSON, valida com Pydantic e injeta o objeto já convertido. Se faltar campo obrigatório, retorna 422 antes de chamar a função.' },
+                          { color: '#06b6d4', label: '**dados.model_dump()', desc: 'Converte o modelo em dicionário e "espalha" os campos — equivale a escrever titulo=dados.titulo, descricao=dados.descricao, concluida=dados.concluida.' },
+                        ].map(({ color, label, desc }) => (
+                          <div key={label} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                            <div style={{ flexShrink: 0, background: `${color}22`, border: `1px solid ${color}55`, color, borderRadius: '6px', padding: '3px 10px', fontSize: '0.7rem', fontFamily: 'monospace', fontWeight: 700, minWidth: '160px', textAlign: 'center' }}>{label}</div>
+                            <div style={{ fontSize: '0.78rem', opacity: 0.8, lineHeight: 1.55, paddingTop: '3px' }}>{desc}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </StepBlock>
+
+                  <StepBlock num="05" title="Parâmetros de rota — o {id} na URL" forceOpen={exportMode}>
+                    <p>Endpoints de busca, edição e remoção recebem o ID diretamente pela URL:</p>
+                    <CodeBlock lang="PYTHON" html={`<span class="dec">@app.get</span>(<span class="str">"/tarefas/{id}"</span>, response_model=<span class="cls">Tarefa</span>)
+<span class="kw">def</span> <span class="fn">buscar_tarefa</span>(id: <span class="cls">str</span>):
+    <span class="kw">for</span> t <span class="kw">in</span> tarefas_db:
+        <span class="kw">if</span> t.id == id:
+            <span class="kw">return</span> t
+    <span class="kw">raise</span> <span class="fn">HTTPException</span>(status_code=<span class="num">404</span>, detail=<span class="str">"Tarefa não encontrada"</span>)`} />
+                    <div style={{ border: '1px solid var(--glass-border)', borderRadius: '14px', padding: '1.25rem', margin: '0.75rem 0', background: 'var(--glass-bg)' }}>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 700, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1rem' }}>COMO O {'{ID}'} CHEGA À FUNÇÃO</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '0.65rem', opacity: 0.5, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>URL da Requisição</div>
+                          <div style={{ fontFamily: 'monospace', fontSize: '0.85rem', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'var(--code-bg)' }}>
+                            GET /tarefas/<span style={{ color: '#f59e0b', fontWeight: 700 }}>abc-123</span>
+                          </div>
+                        </div>
+                        <div style={{ fontSize: '1.4rem', color: 'var(--accent-color)' }}>→</div>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '0.65rem', opacity: 0.5, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>FastAPI extrai</div>
+                          <div style={{ fontFamily: 'monospace', fontSize: '0.85rem', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'var(--code-bg)' }}>
+                            id = <span style={{ color: '#f59e0b', fontWeight: 700 }}>"abc-123"</span>
+                          </div>
+                        </div>
+                        <div style={{ fontSize: '1.4rem', color: 'var(--accent-color)' }}>→</div>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '0.65rem', opacity: 0.5, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Função recebe</div>
+                          <div style={{ fontFamily: 'monospace', fontSize: '0.85rem', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'var(--code-bg)' }}>
+                            buscar_tarefa(<span style={{ color: '#f59e0b', fontWeight: 700 }}>"abc-123"</span>)
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <InfoBox label="📌 CONCEITO — HTTPException">
+                      Quando o ID não é encontrado, <code>raise HTTPException(status_code=404)</code> interrompe a função imediatamente — nenhuma linha abaixo é executada. É como um <code>return</code> de erro: o FastAPI captura a exceção e envia a resposta de erro ao cliente.
+                    </InfoBox>
+                  </StepBlock>
+
+                  <StepBlock num="06" title="O CRUD completo — visão geral" forceOpen={exportMode}>
+                    <p>Cada operação CRUD usa um método HTTP diferente com lógica específica:</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '0.75rem', margin: '0.75rem 0' }}>
+                      {[
+                        { method: 'POST',   color: '#6788c2', path: '/tarefas',      op: 'Criar',   icon: '➕', status: '201',       desc: 'Body JSON → gera UUID → adiciona à lista' },
+                        { method: 'GET',    color: '#22c55e', path: '/tarefas',      op: 'Listar',  icon: '📋', status: '200',       desc: 'Sem parâmetros → retorna a lista inteira' },
+                        { method: 'GET',    color: '#22c55e', path: '/tarefas/{id}', op: 'Buscar',  icon: '🔍', status: '200 / 404', desc: 'ID na URL → percorre lista → 1 item ou 404' },
+                        { method: 'PUT',    color: '#f59e0b', path: '/tarefas/{id}', op: 'Editar',  icon: '✏️', status: '200 / 404', desc: 'ID + body → substitui o item na lista' },
+                        { method: 'DELETE', color: '#ef4444', path: '/tarefas/{id}', op: 'Remover', icon: '🗑️', status: '204 / 404', desc: 'ID na URL → remove da lista → sem body' },
+                      ].map(({ method, color, path, op, icon, status, desc }) => (
+                        <div key={method + path} style={{ padding: '14px', borderRadius: '12px', border: `1px solid ${color}44`, background: `${color}0d`, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ fontSize: '1.1rem' }}>{icon}</span>
+                            <span style={{ padding: '2px 7px', borderRadius: '4px', background: color, color: 'white', fontSize: '0.65rem', fontWeight: 700 }}>{method}</span>
+                          </div>
+                          <div style={{ fontWeight: 700, fontSize: '0.82rem' }}>{op}</div>
+                          <div style={{ fontFamily: 'monospace', fontSize: '0.65rem', opacity: 0.55 }}>{path}</div>
+                          <div style={{ fontSize: '0.72rem', opacity: 0.7, lineHeight: 1.4, borderTop: '1px solid var(--glass-border)', paddingTop: '6px', marginTop: '2px' }}>{desc}</div>
+                          <div style={{ fontSize: '0.68rem', fontWeight: 700, color }}>{status}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <InfoBox variant="tip" label="💡 PRÓXIMO PASSO">
+                      Agora que você entende como cada linha funciona, na <strong>Aula 2</strong> vamos substituir a lista <code>tarefas_db</code> por um banco de dados SQLite real — mantendo a mesma estrutura de endpoints.
+                    </InfoBox>
+                  </StepBlock>
+
+                  <StepBlock num="07" title="Código completo anotado — main.py" forceOpen={exportMode}>
+                    <p>Releia o arquivo completo com uma explicação em cada linha. Use como referência de revisão:</p>
+                    <CodeBlock lang="PYTHON — main.py completo anotado" html={`<span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI, HTTPException      <span class="cmt"># importa a classe da app e o helper de erros HTTP</span>
+<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel                      <span class="cmt"># classe base para validação automática de dados</span>
+<span class="kw">from</span> typing <span class="kw">import</span> List                              <span class="cmt"># anotação de tipo para listas tipadas</span>
+<span class="kw">import</span> uuid                                          <span class="cmt"># módulo padrão — gera IDs únicos universais (uuid4)</span>
+
+app = <span class="fn">FastAPI</span>(title=<span class="str">"API de Tarefas"</span>, version=<span class="str">"1.0.0"</span>)  <span class="cmt"># instância da app — o Uvicorn vai servir este objeto</span>
+
+<span class="kw">class</span> <span class="cls">TarefaEntrada</span>(BaseModel):                     <span class="cmt"># schema de ENTRADA: dados que o cliente envia</span>
+    titulo: <span class="cls">str</span>                                      <span class="cmt"># campo obrigatório (sem default = FastAPI exige)</span>
+    descricao: <span class="cls">str</span>                                   <span class="cmt"># campo obrigatório</span>
+    concluida: <span class="cls">bool</span> = <span class="kw">False</span>                          <span class="cmt"># campo opcional — default False se não enviado</span>
+
+<span class="kw">class</span> <span class="cls">Tarefa</span>(<span class="cls">TarefaEntrada</span>):                        <span class="cmt"># schema de SAÍDA: herda TarefaEntrada e adiciona id</span>
+    id: <span class="cls">str</span>                                          <span class="cmt"># gerado pelo servidor, nunca enviado pelo cliente</span>
+
+tarefas_db: List[<span class="cls">Tarefa</span>] = []                       <span class="cmt"># "banco" em memória — reiniciar o servidor apaga tudo</span>
+
+<span class="dec">@app.get</span>(<span class="str">"/"</span>)                                        <span class="cmt"># rota raiz — útil para verificar se a API está no ar</span>
+<span class="kw">def</span> <span class="fn">raiz</span>():
+    <span class="kw">return</span> {<span class="str">"mensagem"</span>: <span class="str">"API de Tarefas funcionando! 🚀"</span>}
+
+<span class="dec">@app.post</span>(<span class="str">"/tarefas"</span>, response_model=<span class="cls">Tarefa</span>, status_code=<span class="num">201</span>)  <span class="cmt"># POST = criar recurso; 201 = Created</span>
+<span class="kw">def</span> <span class="fn">criar_tarefa</span>(dados: <span class="cls">TarefaEntrada</span>):             <span class="cmt"># Pydantic valida o body JSON e injeta o objeto</span>
+    nova = <span class="cls">Tarefa</span>(id=<span class="cls">str</span>(uuid.<span class="fn">uuid4</span>()), **dados.<span class="fn">model_dump</span>())  <span class="cmt"># ID único + campos do body "espalhados"</span>
+    tarefas_db.<span class="fn">append</span>(nova)                          <span class="cmt"># adiciona a nova tarefa à lista em memória</span>
+    <span class="kw">return</span> nova                                      <span class="cmt"># FastAPI serializa conforme response_model=Tarefa</span>
+
+<span class="dec">@app.get</span>(<span class="str">"/tarefas"</span>, response_model=List[<span class="cls">Tarefa</span>])   <span class="cmt"># GET sem {id} = listar todos os itens</span>
+<span class="kw">def</span> <span class="fn">listar_tarefas</span>():
+    <span class="kw">return</span> tarefas_db                                <span class="cmt"># FastAPI serializa a lista inteira automaticamente</span>
+
+<span class="dec">@app.get</span>(<span class="str">"/tarefas/{id}"</span>, response_model=<span class="cls">Tarefa</span>)   <span class="cmt"># {id} na URL é extraído e injetado como parâmetro</span>
+<span class="kw">def</span> <span class="fn">buscar_tarefa</span>(id: <span class="cls">str</span>):
+    <span class="kw">for</span> t <span class="kw">in</span> tarefas_db:                             <span class="cmt"># percorre a lista procurando o ID</span>
+        <span class="kw">if</span> t.id == id:
+            <span class="kw">return</span> t                                 <span class="cmt"># encontrou → retorna 200 com a tarefa</span>
+    <span class="kw">raise</span> <span class="fn">HTTPException</span>(status_code=<span class="num">404</span>, detail=<span class="str">"Tarefa não encontrada"</span>)  <span class="cmt"># não encontrou → 404</span>
+
+<span class="dec">@app.put</span>(<span class="str">"/tarefas/{id}"</span>, response_model=<span class="cls">Tarefa</span>)    <span class="cmt"># PUT = substituir o recurso inteiro</span>
+<span class="kw">def</span> <span class="fn">editar_tarefa</span>(id: <span class="cls">str</span>, dados: <span class="cls">TarefaEntrada</span>):
+    <span class="kw">for</span> i, t <span class="kw">in</span> <span class="fn">enumerate</span>(tarefas_db):              <span class="cmt"># enumerate() fornece índice (i) e item (t)</span>
+        <span class="kw">if</span> t.id == id:
+            atualizada = <span class="cls">Tarefa</span>(id=id, **dados.<span class="fn">model_dump</span>())  <span class="cmt"># cria Tarefa com os novos dados</span>
+            tarefas_db[i] = atualizada               <span class="cmt"># substitui no índice correto da lista</span>
+            <span class="kw">return</span> atualizada                        <span class="cmt"># retorna 200 com a tarefa atualizada</span>
+    <span class="kw">raise</span> <span class="fn">HTTPException</span>(status_code=<span class="num">404</span>, detail=<span class="str">"Tarefa não encontrada"</span>)
+
+<span class="dec">@app.delete</span>(<span class="str">"/tarefas/{id}"</span>, status_code=<span class="num">204</span>)      <span class="cmt"># DELETE = remover; 204 = No Content (sem body)</span>
+<span class="kw">def</span> <span class="fn">remover_tarefa</span>(id: <span class="cls">str</span>):
+    <span class="kw">for</span> i, t <span class="kw">in</span> <span class="fn">enumerate</span>(tarefas_db):
+        <span class="kw">if</span> t.id == id:
+            tarefas_db.<span class="fn">pop</span>(i)                       <span class="cmt"># remove o item pelo índice</span>
+            <span class="kw">return</span>                                   <span class="cmt"># return vazio = 204 sem body na resposta</span>
+    <span class="kw">raise</span> <span class="fn">HTTPException</span>(status_code=<span class="num">404</span>, detail=<span class="str">"Tarefa não encontrada"</span>)`} />
+                  </StepBlock>
+
+                  <div className="section-nav">
+                    <button className="btn-outline" onClick={() => goTo(5)}>← Módulo 4</button>
+                    <button className="btn-primary btn-pabd" onClick={() => goTo(7)}>Quiz →</button>
+                  </div>
+                </div>
+              </LessonSection>
+            )}
+
+            {/* ── Section 7: Quiz ── */}
+            {(current === 7 || exportMode) && (
               <LessonSection>
                 <div className="card" style={{ marginTop: '1.5rem' }}>
                   <div className="section-tag">AVALIAÇÃO</div>
@@ -817,7 +1107,7 @@ tarefas_db: List[<span class="cls">Tarefa</span>] = []
                   )}
 
                   <div className="section-nav" style={{ marginTop: '2rem' }}>
-                    <button className="btn-outline" onClick={() => goTo(5)}>← Módulo 4</button>
+                    <button className="btn-outline" onClick={() => goTo(6)}>← Módulo 5</button>
                     <button className="btn-outline" onClick={() => goTo(1)}>☰ Sumário</button>
                     <button className="btn-outline" onClick={() => goTo(0)}>⌂ Início</button>
                   </div>
