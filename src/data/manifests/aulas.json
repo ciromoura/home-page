@@ -36,6 +36,11 @@
           "title": "FastAPI - Banco de Dados SQLite",
           "href": "/aulas/pabd-fastapi-db",
           "description": "Conecte sua API FastAPI ao SQLite para persistir dados entre reinicializações. Inclui database.py, queries parametrizadas e boas práticas."
+        },
+        {
+          "title": "Atividade: API Escolar — Alunos, Disciplinas e Infrações",
+          "href": "/aulas/pabd-fastapi-atividade",
+          "description": "Atividade prática com FastAPI: CRUD completo para Alunos, Disciplinas (N:N) e Infrações. Relacionamentos, validação de integridade referencial e status 409."
         }
       ]
     }
