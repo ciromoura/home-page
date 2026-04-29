@@ -14,6 +14,11 @@
           "title": "IA Generativa e Engenharia de Prompt",
           "href": "/aulas/educacao-digital-ia-generativa",
           "description": "Como a IA generativa funciona, o que são LLMs e Machine Learning, e como extrair o melhor dessas ferramentas com o método PROMPT."
+        },
+        {
+          "title": "Apresentação Científica de Sucesso",
+          "href": "/aulas/educacao-digital-apresentacao",
+          "description": "Guia passo a passo do planejamento ao dia da defesa: design de slides, construção de conteúdo, revisão, ensaio e técnicas de comunicação para bancas avaliadoras."
         }
       ]
     },
