@@ -42,3 +42,5 @@ Para colaborações académicas ou profissionais:
 -----
 
 *© 2025 @ciromoura. Desenvolvido com foco em educação e tecnologia.*
+
+-----
